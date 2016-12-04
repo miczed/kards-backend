@@ -3,64 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="css/normalize.css" type="text/css">
-    <link href="lib/katex/katex.min.css" type="text/css">
+    <link href="css/normalize.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,400i,700,700i" rel="stylesheet">
+    <link href="lib/katex/katex.min.css" type="text/css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
     <link href="https://cdn.quilljs.com/1.1.5/quill.snow.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
     <div id="container">
-        <div id="cards">
-            <h1>Your Cards:</h1>
-            <ul id="cards-list"></ul>
-        </div>
-        <div id="card">
-            <h1>Create / Edit Card: </h1>
-            <label for="card-title">Titel</label>
-            <input type="text" id="card-title" placeholder="Type a title...">
-            <label for="card-category">Kategorie</label>
-            <select id="card-category">
-            </select>
-            <div id="front">
-                <h3>Front</h3>
-                <div id="front-toolbar">
-                    <button class="ql-bold">Bold</button>
-                    <button class="ql-italic">Italic</button>
+        <div id="sidebar">
+                <div id="categories">
+                    <h2>Categories:</h2>
+                    <ul id="categories-list"></ul>
                 </div>
-                <div id="front-editor">
-                    <p>Hello World!</p>
+                <button id="categories-new">Neue Kategorie</button>
+                <div id="cards">
+                    <h2>Cards:</h2>
+                    <ul id="cards-list"></ul>
+                </div>
+                <button id="cards-new">Neue Karte</button>
+        </div>
+        <div id="main">
+            <div id="card" class="show">
+                <h2>Create / Edit Card: </h2>
+                <label for="card-title">Titel</label>
+                <input type="text" id="card-title" placeholder="Type a title...">
+                <label for="card-category">Kategorie</label>
+                <select id="card-category">
+                </select>
+                <div id="front">
+                    <h3>Front</h3>
+                    <div id="front-editor">
+
+                    </div>
+                </div>
+                <div id="back">
+                    <h3>Back</h3>
+                    <div id="back-editor">
+
+                    </div>
+                </div>
+                <div id="card-controls">
+                    <button id="card-controls-save">Karte Speichern</button>
+                    <button id="card-controls-new">Neue Karte</button>
+                    <button id="card-controls-delete">Karte löschen</button>
                 </div>
             </div>
-            <div id="back">
-                <h3>Back</h3>
-                <!-- Create the editor container -->
-                <div id="back-editor">
-                    <p>Hello World!</p>
+            <div id="category" class="hide">
+                <h2>Create / Edit Category: </h2>
+                <label for="category-title">Titel</label>
+                <input type="text" id="category-title" placeholder="Type a title...">
+                <label for="category-parent">Oberkategorie</label>
+                <select id="category-parent">
+                </select>
+                <div id="category-controls">
+                    <button id="category-controls-save">Kategorie Speichern</button>
+                    <button id="category-controls-new">Neue Kategorie</button>
+                    <button id="category-controls-delete">Kategorie löschen</button>
                 </div>
             </div>
-            <div id="card-controls">
-                <button id="card-controls-save">Karte Speichern</button>
-                <button id="card-controls-new">Neue Karte</button>
-                <button id="card-controls-delete">Karte löschen</button>
-            </div>
         </div>
-        <div id="categories">
-            <h1>Your Categories:</h1>
-            <ul id="categories-list"></ul>
-        </div>
-        <div id="category">
-            <h1>Create / Edit Category: </h1>
-            <label for="category-title">Titel</label>
-            <input type="text" id="category-title" placeholder="Type a title...">
-            <label for="category-parent">Oberkategorie</label>
-            <select id="category-parent">
-            </select>
-            <div id="category-controls">
-                <button id="category-controls-save">Kategorie Speichern</button>
-                <button id="category-controls-new">Neue Kategorie</button>
-                <button id="category-controls-delete">Kategorie löschen</button>
-            </div>
-        </div>
+
+
     </div>
 
 

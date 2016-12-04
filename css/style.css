@@ -1,3 +1,62 @@
+* {
+  box-sizing: border-box; }
 
+html, body {
+  margin: 0px;
+  padding: 0px;
+  height: 100%; }
+
+/* Helper classes to show / hide stuff */
+.show {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.2s ease-in; }
+
+.hide {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease-in; }
+
+/* Wraps the whole webapp */
+#container {
+  height: 100%; }
+
+/* Sidebar on the left side of the screen */
+#sidebar {
+  padding: 60px;
+  width: 350px;
+  box-shadow: 2px 0px 5px rgba(45, 45, 45, 0.1);
+  position: fixed;
+  height: 100%; }
+  #sidebar ul {
+    padding-left: 20px; }
+
+button {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  font-size: 10pt; }
+
+button.transparent {
+  background: transparent;
+  border: 0px;
+  padding: 5px 10px; }
+
+/* Main Container on the right side */
+#main {
+  position: relative;
+  left: 350px;
+  width: calc(100vw - 350px); }
+
+#back-editor, #front-editor {
+  height: 300px;
+  display: block;
+  margin-bottom: 30px; }
+
+#back .ql-container, #front .ql-container {
+  font-family: 'Merriweather', serif; }
+
+#card, #category {
+  padding: 60px; }
 
 /*# sourceMappingURL=style.css.map */
