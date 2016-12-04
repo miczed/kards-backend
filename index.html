@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/normalize.css" type="text/css">
+    <link href="lib/katex/katex.min.css" type="text/css">
+    <link href="https://cdn.quilljs.com/1.1.5/quill.snow.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="container">
+        <div id="cards">
+            <h1>Your Cards:</h1>
+            <ul id="cards-list"></ul>
+        </div>
+        <div id="card">
+            <h1>Create / Edit Card: </h1>
+            <label for="card-title">Titel</label>
+            <input type="text" id="card-title" placeholder="Type a title...">
+            <label for="card-category">Kategorie</label>
+            <select id="card-category">
+            </select>
+            <div id="front">
+                <h3>Front</h3>
+                <div id="front-toolbar">
+                    <button class="ql-bold">Bold</button>
+                    <button class="ql-italic">Italic</button>
+                </div>
+                <div id="front-editor">
+                    <p>Hello World!</p>
+                </div>
+            </div>
+            <div id="back">
+                <h3>Back</h3>
+                <!-- Create the editor container -->
+                <div id="back-editor">
+                    <p>Hello World!</p>
+                </div>
+            </div>
+            <div id="card-controls">
+                <button id="card-controls-save">Karte Speichern</button>
+                <button id="card-controls-new">Neue Karte</button>
+                <button id="card-controls-delete">Karte löschen</button>
+            </div>
+        </div>
+        <div id="categories">
+            <h1>Your Categories:</h1>
+            <ul id="categories-list"></ul>
+        </div>
+        <div id="category">
+            <h1>Create / Edit Category: </h1>
+            <label for="category-title">Titel</label>
+            <input type="text" id="category-title" placeholder="Type a title...">
+            <label for="category-parent">Oberkategorie</label>
+            <select id="category-parent">
+            </select>
+            <div id="category-controls">
+                <button id="category-controls-save">Kategorie Speichern</button>
+                <button id="category-controls-new">Neue Kategorie</button>
+                <button id="category-controls-delete">Kategorie löschen</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+
+    <!-- Quill Addons -->
+    <script src="lib/katex/katex.min.js"></script>
+
+    <!-- Quill library -->
+    <script src="https://cdn.quilljs.com/1.1.5/quill.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/index.js"></script>
+
+
+</body>
+</html>
