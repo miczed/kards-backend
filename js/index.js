@@ -24,7 +24,8 @@ const toolbarOptions = [
     [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
     [{ 'align': [] }],
 
-    ['formula','image','video']
+    ['formula','image','video'],
+    ['clean'] // clean styling button
 
 ];
 
