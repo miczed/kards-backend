@@ -6,11 +6,15 @@ $sidebar-width: 500px;
 }
 
 html,body {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   height: 100%;
   color: $main-color;
   font-family: 'Source Sans Pro', sans-serif;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1,h2,h3 {
@@ -18,6 +22,13 @@ h1,h2,h3 {
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 1px;
+}
+h2 {
+  margin-top: 16px;
+}
+h3 {
+  font-size: 16px;
+  color: $main-color;
 }
 
 /* Helper classes to show / hide stuff */
@@ -38,16 +49,42 @@ h1,h2,h3 {
   height: 100%;
 }
 
+#categories {
+  margin-bottom: 30px;
+}
+
 /* Sidebar on the left side of the screen */
 #sidebar {
-  padding: 0px 60px 60px;
-  width: 350px;
-  box-shadow: 2px 0px 5px rgba($main-color,0.10);
+  padding: 30px 30px 30px;
+  width: 300px;
+  box-shadow: 4px 0 5px rgba($main-color,0.10);
   position: fixed;
   height: 100%;
 
   ul {
-    padding-left: 20px;
+    padding-left: 0;
+    list-style-type: none;
+    height: auto;
+
+    li {
+      cursor: pointer;
+      line-height: 25px;
+      min-height: 25px;
+      ul {
+        padding-left: 20px;
+        list-style-type: circle;
+      }
+    }
+    li:hover {
+      color: black;
+      position: relative;
+      button {
+        display: inline-block;
+      }
+    }
+    li button {
+      display: none;
+    }
   }
 }
 
@@ -57,18 +94,23 @@ button {
   padding: 10px 20px;
   font-size: 10pt;
   font-family: 'Source Sans Pro', sans-serif;
+  cursor: pointer;
 }
 button.transparent {
   background: transparent;
-  border: 0px;
-  padding: 5px 10px;
+  border: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-left: 5px;
 }
 button.button_main {
   border-radius: 50px;
   border: 1px solid #F1F1F1;
   background: white;
   color: rgba($main-color,0.5);
-  box-shadow: 0px 4px 10px rgba($main-color,0.1);
+  box-shadow: 0 4px 10px rgba($main-color,0.1);
   letter-spacing: 2px;
   margin-right: 15px;
   font-weight: 600;
@@ -77,11 +119,41 @@ button.button_main {
 /* Main Container on the right side */
 #main {
   position: relative;
-  left: 350px;
-  width: calc(100vw - 350px);
+  left: 330px;
+  width: calc(100vw - 330px);
 }
-#card {
+#card, #category {
+  top: 0;
+  padding: 30px;
+  position: absolute;
 
+  input, select {
+    display: block;
+  }
+  .form-control {
+    float: left;
+    height: auto;
+    padding-bottom: 15px;
+
+    label {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: $main-color;
+      font-weight: 600;
+    }
+    input, select {
+      height: 30px;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-right: 15px;
+      margin-top: 10px;
+      min-width: 300px;
+    }
+  }
+  section {
+    display: inline-block;
+    width: 100%;
+  }
 }
 
 #back-editor, #front-editor {
@@ -92,8 +164,4 @@ button.button_main {
 
 #back .ql-container, #front .ql-container {
   font-family: 'Merriweather', serif;
-}
-
-#card, #category {
-  padding: 60px;
 }

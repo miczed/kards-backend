@@ -15,30 +15,39 @@
     <div id="container">
         <div id="sidebar">
                 <div id="categories">
-                    <h2>Categories:</h2>
-                    <ul id="categories-list"></ul>
+                    <h3>Categories:</h3>
+                    <div id="categories-list"></div>
+                    <button id="categories-new" class="button_main">Neue Kategorie</button>
                 </div>
-                <button id="categories-new" class="button_main">Neue Kategorie</button>
+
                 <div id="cards">
-                    <h2>Cards:</h2>
+                    <h3>Cards:</h3>
                     <ul id="cards-list"></ul>
+                    <button id="cards-new" class="button_main">Neue Karte</button>
                 </div>
-                <button id="cards-new" class="button_main">Neue Karte</button>
+
         </div>
         <div id="main">
             <div id="card" class="show">
                 <h2>Create / Edit Card: </h2>
-                <label for="card-title">Titel</label>
-                <input type="text" id="card-title" placeholder="Type a title...">
-                <label for="card-category">Kategorie</label>
-                <select id="card-category">
-                </select>
-                <div id="front">
-                    <h3>Front</h3>
-                    <div id="front-editor">
-
+                <section>
+                    <div class="form-control">
+                        <label for="card-title">Titel</label>
+                        <input type="text" id="card-title" placeholder="Type a title...">
                     </div>
-                </div>
+                    <div class="form-control">
+                        <label for="card-category">Kategorie</label>
+                        <select id="card-category"></select>
+                    </div>
+                </section>
+                <section>
+                    <div id="front">
+                        <h3>Front</h3>
+                        <div id="front-editor">
+
+                        </div>
+                    </div>
+                </section>
                 <div id="back">
                     <h3>Back</h3>
                     <div id="back-editor">
@@ -53,16 +62,24 @@
             </div>
             <div id="category" class="hide">
                 <h2>Create / Edit Category: </h2>
-                <label for="category-title">Titel</label>
-                <input type="text" id="category-title" placeholder="Type a title...">
-                <label for="category-parent">Oberkategorie</label>
-                <select id="category-parent">
-                </select>
-                <div id="category-controls">
-                    <button id="category-controls-save" class="button_main">Kategorie Speichern</button>
-                    <button id="category-controls-new" class="button_main">Neue Kategorie</button>
-                    <button id="category-controls-delete" class="button_main">Kategorie löschen</button>
-                </div>
+                <section>
+                    <div class="form-control">
+                        <label for="category-title">Titel</label>
+                        <input type="text" id="category-title" placeholder="Type a title...">
+                    </div>
+                    <div class="form-control">
+                        <label for="category-parent">Oberkategorie</label>
+                        <select id="category-parent">
+                        </select>
+                    </div>
+                </section>
+                <section>
+                    <div id="category-controls">
+                        <button id="category-controls-save" class="button_main">Kategorie Speichern</button>
+                        <button id="category-controls-new" class="button_main">Neue Kategorie</button>
+                        <button id="category-controls-delete" class="button_main">Kategorie löschen</button>
+                    </div>
+                </section>
             </div>
         </div>
 

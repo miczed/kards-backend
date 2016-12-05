@@ -4,12 +4,7 @@
 
 
 /*
-TODO: add hierarchical category functionality
-TODO: do some more styling
-TODO: modify delete function so it takes a firebase key as an argument (functional programming xD)
-TODO: add delete button to links in sidebar
-TODO: show only cards from selected category
-TODO: State indicator: Loading, Saving, Deleting, etc.
+
  */
 
 const toolbarOptions = [
@@ -66,6 +61,7 @@ cardsRef.on('value', function(snapshot) {
  * Called initially and whenever firebase detects a change on a category object
  */
 categoriesRef.on("value", function(snapshot) {
+
     let data = snapshot.val();
     categoriesStore = data;
     let dataWithKeys = [];
@@ -73,15 +69,105 @@ categoriesRef.on("value", function(snapshot) {
         dataWithKeys = Object.keys(data).map((key) => {
             let obj = data[key];
             obj._key = key;
+            obj.children = [];
             return obj;
         });
     }
-    updateCategoriesList(dataWithKeys, document.getElementById("categories-list"));
+    //updateCategoriesList(dataWithKeys, document.getElementById("categories-list"));
+    let tree = buildTree(dataWithKeys);
+    deleteChildren(document.getElementById("categories-list"));
+    buildUlTree(tree,document.getElementById("categories-list"));
     const dummy = { _key: "", title: "-- keine Kategorie --"};
     dataWithKeys.unshift(dummy);
     updateCategoriesSelect(dataWithKeys, document.getElementById("card-category"));
     updateCategoriesSelect(dataWithKeys, document.getElementById("category-parent"));
+
+
 });
+
+/**
+ * helper function to remove all children inside a DOM element
+ * @param elem : element whose children should be removed
+ */
+function deleteChildren(elem) {
+    while (elem.hasChildNodes()) {
+        elem.removeChild(elem.firstChild);
+    }
+}
+
+
+/**
+ * Builds a tree from a flat array
+ * @pre data objects must have empty children property children
+ * @pre data objects parent property must point to the key of the parent or be empty
+ * @param data {Array} of objects
+ * @returns {Array}
+ */
+function buildTree(data) {
+    var dataMap = {};
+    data.forEach(function(node) {
+        dataMap[node._key] = node;
+    });
+
+    // create the tree array
+    var tree = [];
+    data.forEach(function(node) {
+        // find parent
+        var parent = dataMap[node.parent];
+        if (parent) {
+            // create child array if it doesn't exist
+            (parent.children || (parent.children = []))
+            // add node to parent's child array
+                .push(node);
+        } else {
+            // parent is null or missing
+            tree.push(node);
+        }
+    });
+    return tree;
+}
+
+/**
+ * Renders a UL - LI recursively
+ * @param obj : object that should be rendered (should be a tree with children attribute)
+ * @param elem : element in which the object should be rendered
+ */
+function buildUlTree(obj, elem) {
+    if(!obj) { return; }
+    let ul = document.createElement("UL");
+
+    for(let i=0; i < obj.length; i++) {
+        let node = document.createElement("LI");
+        let title = document.createTextNode(obj[i].title);
+        let button = document.createElement("BUTTON");
+        let button_icon = document.createElement("SPAN");
+        button_icon.setAttribute("class","icon-pencil");
+        button.appendChild(button_icon);
+
+        button.setAttribute("data-key", obj[i]._key);
+        node.setAttribute("data-key", obj[i]._key);
+        button.setAttribute("class","transparent");
+        node.appendChild(title);
+        node.appendChild(button);
+
+        button.addEventListener("click", function () {
+            loadCategory(this.getAttribute("data-key"));
+            return true;
+        });
+
+        node.addEventListener("click", function () {
+            loadCardsByCategory(this.getAttribute("data-key"));
+            return true;
+        });
+
+        if(obj[i].children) {
+            buildUlTree(obj[i].children, node);
+        }
+
+        ul.appendChild(node);
+    }
+    elem.appendChild(ul);
+}
 
 /**
  * Updates all dom elements which contain a list of cards
@@ -163,6 +249,21 @@ function updateCategoriesSelect(categoriesList, elem) {
             elem.appendChild(node);
         }
     }
+}
+
+function loadCardsByCategory(categoryKey) {
+    firebase.database().ref('cards').orderByChild('category').equalTo(categoryKey).once('value').then(function(snapshot) {
+        if(snapshot.val()) {
+            let data = snapshot.val();
+            cardsStore = snapshot.val(); // Store returned data in global cards store
+            let dataWithKeys = Object.keys(data).map((key) => {
+                let obj = data[key];
+                obj._key = key;
+                return obj;
+            });
+            updateCardsList(dataWithKeys);
+        }
+    });
 }
 
 /**
@@ -340,25 +441,32 @@ function deleteCategory() {
 function saveCategory() {
     const title = document.getElementById("category-title").value;
     let parent = document.getElementById("category-parent").value;
-    if(parent !== '') {
+    if(parent == '') {
         parent = null;
     }
     if(title) {
+        if(categoryRef && categoryRef.key == parent) {
+            window.alert("Die Kategorie kann sich nicht selbst als Oberkategorie haben.");
+            return;
+        }
         if(categoryRef == null) {
             categoryRef = firebase.database().ref('categories').push();
         }
-        categoryRef.set({
-            title: title,
-            parent: parent
-        });
-        console.log(categoryRef.key);
+
+        let updatedObj = {};
+        updatedObj["title"] = title;
+        updatedObj["parent"] = parent;
+        categoryRef.update(updatedObj);
         categoryRef = firebase.database().ref('categories/' + categoryRef.key);
+
     } else {
         window.alert("Bitte gib einen Titel für die Kategorie an.");
     }
+
+
 }
 
-/* Listener attachements */
+/* Listener attachments */
 const saveCardButton = document.getElementById("card-controls-save");
 saveCardButton.addEventListener("click", saveCard);
 
