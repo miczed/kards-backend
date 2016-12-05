@@ -9,6 +9,7 @@ TODO: do some more styling
 TODO: modify delete function so it takes a firebase key as an argument (functional programming xD)
 TODO: add delete button to links in sidebar
 TODO: show only cards from selected category
+TODO: State indicator: Loading, Saving, Deleting, etc.
  */
 
 const toolbarOptions = [
