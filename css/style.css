@@ -100,9 +100,10 @@ button.button_main {
   font-weight: 600;
   transition: all 200ms ease-out; }
 
-button.button_main:hover {
+button.button_main:hover, button.button_main:focus {
   box-shadow: 0 4px 10px rgba(45, 45, 45, 0.1);
-  color: #2D2D2D; }
+  color: #2D2D2D;
+  outline: none; }
 
 button.red {
   color: #E98686; }

@@ -378,6 +378,8 @@ function saveCard() {
             back_html: document.querySelector("#back-editor .ql-editor").innerHTML,
             title: title,
             category: cat
+        }).then(function () {
+            // TODO: add some sort of notification
         });
 
         // Set cards obj in categories
@@ -396,11 +398,13 @@ function saveCard() {
  * Resets the DOM fields and the cardRef so a new blank card can be created
  * @post: cardRef points to null
  */
-function initCard() {
+function initCard(event) {
     showCardContainer();
     cardRef = null;
-    document.getElementById("card-title").value = "";
+
     document.getElementById("card-category").value = "";
+    document.getElementById("card-title").value = "";
+
     front.setText("");
     back.setText("");
 }
