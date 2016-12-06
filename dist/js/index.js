@@ -1,52 +1,43 @@
+'use strict';
+
 /**
  * Created by michaelziorjen on 21.11.16.
  */
 
-const toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-    ['blockquote', 'code-block'],
+var toolbarOptions = [['bold', 'italic', 'underline', 'strike'], // toggled buttons
+['blockquote', 'code-block'], [{ 'list': 'ordered' }, { 'list': 'bullet' }], [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
 
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-    [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-
-    [{ 'header': [1, 2, false] }],
-
-    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-    [{ 'align': [] }],
-
-    ['formula','image','video'],
-    ['clean'] // clean styling button
+[{ 'header': [1, 2, false] }], [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
+[{ 'align': [] }], ['formula', 'image', 'video'], ['clean'] // clean styling button
 
 ];
 
-const front = new Quill('#front-editor', {
+var front = new Quill('#front-editor', {
     modules: { formula: true, toolbar: toolbarOptions },
     theme: 'snow'
 });
 
-const back = new Quill('#back-editor', {
+var back = new Quill('#back-editor', {
     modules: { formula: true, toolbar: toolbarOptions },
     theme: 'snow'
 });
-
-
 
 // Global cards store
-let cardsStore = []; // Stores all cards locally in the browser (later via localstorage)
-let categoriesStore = []; // Stores all categories locally in the browser (later via localstorage)
-let cardRef; // The currently selected card
-let cardsRef = firebase.database().ref('cards'); // The reference to ALL the cards
-let categoryRef; // The currently selected category
-let categoriesRef = firebase.database().ref('categories'); // Reference to ALL the categories
+var cardsStore = []; // Stores all cards locally in the browser (later via localstorage)
+var categoriesStore = []; // Stores all categories locally in the browser (later via localstorage)
+var cardRef = void 0; // The currently selected card
+var cardsRef = firebase.database().ref('cards'); // The reference to ALL the cards
+var categoryRef = void 0; // The currently selected category
+var categoriesRef = firebase.database().ref('categories'); // Reference to ALL the categories
 
 /**
  * Called initially and whenever firebase detects a change on a cards object
  */
-cardsRef.on('value', function(snapshot) {
-    let data = snapshot.val();
+cardsRef.on('value', function (snapshot) {
+    var data = snapshot.val();
     cardsStore = snapshot.val(); // Store returned data in global cards store
-    let dataWithKeys = Object.keys(data).map((key) => {
-        let obj = data[key];
+    var dataWithKeys = Object.keys(data).map(function (key) {
+        var obj = data[key];
         obj._key = key;
         return obj;
     });
@@ -55,29 +46,27 @@ cardsRef.on('value', function(snapshot) {
 /**
  * Called initially and whenever firebase detects a change on a category object
  */
-categoriesRef.on("value", function(snapshot) {
+categoriesRef.on("value", function (snapshot) {
 
-    let data = snapshot.val();
+    var data = snapshot.val();
     categoriesStore = data;
-    let dataWithKeys = [];
-    if(data != null) {
-        dataWithKeys = Object.keys(data).map((key) => {
-            let obj = data[key];
+    var dataWithKeys = [];
+    if (data != null) {
+        dataWithKeys = Object.keys(data).map(function (key) {
+            var obj = data[key];
             obj._key = key;
             obj.children = [];
             return obj;
         });
     }
     //updateCategoriesList(dataWithKeys, document.getElementById("categories-list"));
-    let tree = buildTree(dataWithKeys);
+    var tree = buildTree(dataWithKeys);
     deleteChildren(document.getElementById("categories-list"));
-    buildUlTree(tree,document.getElementById("categories-list"));
-    const dummy = { _key: "", title: "-- keine Kategorie --"};
+    buildUlTree(tree, document.getElementById("categories-list"));
+    var dummy = { _key: "", title: "-- keine Kategorie --" };
     dataWithKeys.unshift(dummy);
     updateCategoriesSelect(dataWithKeys, document.getElementById("card-category"));
     updateCategoriesSelect(dataWithKeys, document.getElementById("category-parent"));
-
-
 });
 
 /**
@@ -90,7 +79,6 @@ function deleteChildren(elem) {
     }
 }
 
-
 /**
  * Builds a tree from a flat array
  * @pre data objects must have empty children property children
@@ -100,20 +88,20 @@ function deleteChildren(elem) {
  */
 function buildTree(data) {
     var dataMap = {};
-    data.forEach(function(node) {
+    data.forEach(function (node) {
         dataMap[node._key] = node;
     });
 
     // create the tree array
     var tree = [];
-    data.forEach(function(node) {
+    data.forEach(function (node) {
         // find parent
         var parent = dataMap[node.parent];
         if (parent) {
             // create child array if it doesn't exist
-            (parent.children || (parent.children = []))
+            (parent.children || (parent.children = [])).
             // add node to parent's child array
-                .push(node);
+            push(node);
         } else {
             // parent is null or missing
             tree.push(node);
@@ -128,20 +116,22 @@ function buildTree(data) {
  * @param elem : element in which the object should be rendered
  */
 function buildUlTree(obj, elem) {
-    if(!obj) { return; }
-    let ul = document.createElement("UL");
+    if (!obj) {
+        return;
+    }
+    var ul = document.createElement("UL");
 
-    for(let i=0; i < obj.length; i++) {
-        let node = document.createElement("LI");
-        let title = document.createTextNode(obj[i].title);
-        let button = document.createElement("BUTTON");
-        let button_icon = document.createElement("SPAN");
-        button_icon.setAttribute("class","icon-pencil");
+    for (var i = 0; i < obj.length; i++) {
+        var node = document.createElement("LI");
+        var title = document.createTextNode(obj[i].title);
+        var button = document.createElement("BUTTON");
+        var button_icon = document.createElement("SPAN");
+        button_icon.setAttribute("class", "icon-pencil");
         button.appendChild(button_icon);
 
         button.setAttribute("data-key", obj[i]._key);
         node.setAttribute("data-key", obj[i]._key);
-        button.setAttribute("class","transparent");
+        button.setAttribute("class", "transparent");
         node.appendChild(title);
         node.appendChild(button);
 
@@ -155,7 +145,7 @@ function buildUlTree(obj, elem) {
             return true;
         });
 
-        if(obj[i].children) {
+        if (obj[i].children) {
             buildUlTree(obj[i].children, node);
         }
 
@@ -169,27 +159,27 @@ function buildUlTree(obj, elem) {
  * @param cardsList Array with cards
  */
 function updateCardsList(cardsList) {
-    const cardsListElem = document.getElementById("cards-list");
+    var cardsListElem = document.getElementById("cards-list");
     while (cardsListElem.hasChildNodes()) {
         cardsListElem.removeChild(cardsListElem.firstChild);
     }
 
-    for(let i = 0; i < cardsList.length; i++) {
-        let node = document.createElement("LI");
-        let title = document.createTextNode(cardsList[i].title);
-        let edit_button = document.createElement("BUTTON");
-        let edit_button_icon = document.createElement("SPAN");
-        edit_button_icon.setAttribute("class","icon-pencil");
+    for (var i = 0; i < cardsList.length; i++) {
+        var node = document.createElement("LI");
+        var title = document.createTextNode(cardsList[i].title);
+        var edit_button = document.createElement("BUTTON");
+        var edit_button_icon = document.createElement("SPAN");
+        edit_button_icon.setAttribute("class", "icon-pencil");
         edit_button.appendChild(edit_button_icon);
 
         edit_button.setAttribute("data-key", cardsList[i]._key);
-        edit_button.setAttribute("class","transparent");
+        edit_button.setAttribute("class", "transparent");
         node.appendChild(title);
         node.appendChild(edit_button);
 
-        edit_button.addEventListener("click",function() {
-           loadCard(this.getAttribute("data-key"));
-           return true;
+        edit_button.addEventListener("click", function () {
+            loadCard(this.getAttribute("data-key"));
+            return true;
         });
         cardsListElem.appendChild(node);
     }
@@ -201,20 +191,20 @@ function updateCardsList(cardsList) {
  * @param elem UL element
  */
 function updateCategoriesList(categoriesList, elem) {
-    if(elem) {
+    if (elem) {
         while (elem.hasChildNodes()) {
             elem.removeChild(elem.firstChild);
         }
-        for (let i = 0; i < categoriesList.length; i++) {
-            let node = document.createElement("LI");
-            let title = document.createTextNode(categoriesList[i].title);
-            let button = document.createElement("BUTTON");
-            let button_icon = document.createElement("SPAN");
-            button_icon.setAttribute("class","icon-pencil");
+        for (var i = 0; i < categoriesList.length; i++) {
+            var node = document.createElement("LI");
+            var title = document.createTextNode(categoriesList[i].title);
+            var button = document.createElement("BUTTON");
+            var button_icon = document.createElement("SPAN");
+            button_icon.setAttribute("class", "icon-pencil");
             button.appendChild(button_icon);
 
             button.setAttribute("data-key", categoriesList[i]._key);
-            button.setAttribute("class","transparent");
+            button.setAttribute("class", "transparent");
             node.appendChild(title);
             node.appendChild(button);
 
@@ -232,14 +222,14 @@ function updateCategoriesList(categoriesList, elem) {
  * @param elem SELECT DOM element
  */
 function updateCategoriesSelect(categoriesList, elem) {
-    if(elem) {
+    if (elem) {
         while (elem.hasChildNodes()) {
             elem.removeChild(elem.firstChild);
         }
-        for(let i = 0; i < categoriesList.length; i++) {
-            let node = document.createElement("OPTION");
-            let title = document.createTextNode(categoriesList[i].title);
-            node.setAttribute("value",categoriesList[i]._key);
+        for (var i = 0; i < categoriesList.length; i++) {
+            var node = document.createElement("OPTION");
+            var title = document.createTextNode(categoriesList[i].title);
+            node.setAttribute("value", categoriesList[i]._key);
             node.appendChild(title);
             elem.appendChild(node);
         }
@@ -247,16 +237,18 @@ function updateCategoriesSelect(categoriesList, elem) {
 }
 
 function loadCardsByCategory(categoryKey) {
-    firebase.database().ref('cards').orderByChild('category').equalTo(categoryKey).once('value').then(function(snapshot) {
-        if(snapshot.val()) {
-            let data = snapshot.val();
-            cardsStore = snapshot.val(); // Store returned data in global cards store
-            let dataWithKeys = Object.keys(data).map((key) => {
-                let obj = data[key];
-                obj._key = key;
-                return obj;
-            });
-            updateCardsList(dataWithKeys);
+    firebase.database().ref('cards').orderByChild('category').equalTo(categoryKey).once('value').then(function (snapshot) {
+        if (snapshot.val()) {
+            (function () {
+                var data = snapshot.val();
+                cardsStore = snapshot.val(); // Store returned data in global cards store
+                var dataWithKeys = Object.keys(data).map(function (key) {
+                    var obj = data[key];
+                    obj._key = key;
+                    return obj;
+                });
+                updateCardsList(dataWithKeys);
+            })();
         }
     });
 }
@@ -267,7 +259,7 @@ function loadCardsByCategory(categoryKey) {
  */
 function loadCard(key) {
     showCardContainer();
-    let card = cardsStore[key];
+    var card = cardsStore[key];
     cardRef = firebase.database().ref('cards/' + key);
     document.getElementById("card-title").value = card.title;
     document.getElementById("card-category").value = card.category;
@@ -280,8 +272,8 @@ function loadCard(key) {
  * @param key: String the firebase key of the category
  */
 function loadCategory(key) {
-    showCategoryContainer()
-    let category = categoriesStore[key];
+    showCategoryContainer();
+    var category = categoriesStore[key];
     categoryRef = firebase.database().ref('categories/' + key);
     document.getElementById("category-title").value = category.title;
     document.getElementById("category-parent").value = category.parent;
@@ -290,13 +282,13 @@ function loadCategory(key) {
  * Shows the card container and hides the categories container
  */
 function showCardContainer() {
-    const cardContainer = document.getElementById("card");
-    const categoryContainer = document.getElementById("category");
-    if(cardContainer.getAttribute("class") == "hide") {
-        cardContainer.setAttribute("class","show");
+    var cardContainer = document.getElementById("card");
+    var categoryContainer = document.getElementById("category");
+    if (cardContainer.getAttribute("class") == "hide") {
+        cardContainer.setAttribute("class", "show");
     }
-    if(categoryContainer.getAttribute("class") == "show") {
-        categoryContainer.setAttribute("class","hide");
+    if (categoryContainer.getAttribute("class") == "show") {
+        categoryContainer.setAttribute("class", "hide");
     }
 }
 
@@ -304,13 +296,13 @@ function showCardContainer() {
  * Shows the category container and hides the card container
  */
 function showCategoryContainer() {
-    const cardContainer = document.getElementById("card");
-    const categoryContainer = document.getElementById("category");
-    if(cardContainer.getAttribute("class") == "show") {
-        cardContainer.setAttribute("class","hide");
+    var cardContainer = document.getElementById("card");
+    var categoryContainer = document.getElementById("category");
+    if (cardContainer.getAttribute("class") == "show") {
+        cardContainer.setAttribute("class", "hide");
     }
-    if(categoryContainer.getAttribute("class") == "hide") {
-        categoryContainer.setAttribute("class","show");
+    if (categoryContainer.getAttribute("class") == "hide") {
+        categoryContainer.setAttribute("class", "show");
     }
 }
 
@@ -320,11 +312,12 @@ function showCategoryContainer() {
  * @post: cardRef is set to the updated / created card
  */
 function saveCard() {
-    const title = document.getElementById("card-title").value;
-    const cat = document.getElementById("card-category").value;
-    if(title && cat) {
-        if(cardRef == null) { // Neue Karte wird erstellt
-            cardRef = firebase.database().ref('cards').push()
+    var title = document.getElementById("card-title").value;
+    var cat = document.getElementById("card-category").value;
+    if (title && cat) {
+        if (cardRef == null) {
+            // Neue Karte wird erstellt
+            cardRef = firebase.database().ref('cards').push();
         }
         cardRef.set({
             front_delta: front.getContents(),
@@ -336,9 +329,9 @@ function saveCard() {
         });
 
         // Set cards obj in categories
-        const cardKey = cardRef.key;
-        const catRef = firebase.database().ref("categories/" + cat + "/cards/" + cardKey);
-        let updatedObj = {};
+        var cardKey = cardRef.key;
+        var catRef = firebase.database().ref("categories/" + cat + "/cards/" + cardKey);
+        var updatedObj = {};
         updatedObj[cardKey] = true;
         catRef.update(updatedObj);
 
@@ -376,14 +369,14 @@ function initCategory() {
  * @post: cardRef is set to null
  */
 function deleteCard() {
-    if(cardRef != null) {
-        const cardKey = cardRef.key;
-        const cat = cardsStore[cardKey].category;
-        const card = cardsStore[cardKey];
-        let answer = window.confirm("Möchtest du die Karte " + card.title + " wirklich löschen?");
-        if(answer == true ) {
-            let catRef = firebase.database().ref("categories/" + cat + "/cards/" + cardKey);
-            let updatedObj = {};
+    if (cardRef != null) {
+        var cardKey = cardRef.key;
+        var cat = cardsStore[cardKey].category;
+        var card = cardsStore[cardKey];
+        var answer = window.confirm("Möchtest du die Karte " + card.title + " wirklich löschen?");
+        if (answer == true) {
+            var catRef = firebase.database().ref("categories/" + cat + "/cards/" + cardKey);
+            var updatedObj = {};
             updatedObj[cardKey] = null;
             catRef.update(updatedObj);
             cardRef.remove();
@@ -399,25 +392,25 @@ function deleteCard() {
  * @post: categoryRef is set to null
  */
 function deleteCategory() {
-    if(categoryRef != null) {
+    if (categoryRef != null) {
 
-        const cat = categoriesStore[categoryRef.key];
-        let cardCount;
-        if(cat.cards) {
+        var cat = categoriesStore[categoryRef.key];
+        var cardCount = void 0;
+        if (cat.cards) {
             console.log(cat.cards);
             cardCount = Object.keys(cat.cards).length;
         } else {
             cardCount = 0;
         }
-        let answer = window.confirm("Möchtest du die Kategorie " + cat.title + " und ALLE ihre " + cardCount +" zugeordneten Karten wirklich löschen?");
-        if(answer == true) {
-            let deletedObjs = {}
-            for (let key in cat.cards) {
+        var answer = window.confirm("Möchtest du die Kategorie " + cat.title + " und ALLE ihre " + cardCount + " zugeordneten Karten wirklich löschen?");
+        if (answer == true) {
+            var deletedObjs = {};
+            for (var key in cat.cards) {
                 if (cat.cards.hasOwnProperty(key)) {
                     deletedObjs[key] = null;
                 }
             }
-            let cardsRoot = firebase.database().ref("cards");
+            var cardsRoot = firebase.database().ref("cards");
             console.log(deletedObjs);
             cardsRoot.update(deletedObjs);
             categoryRef.remove();
@@ -434,35 +427,32 @@ function deleteCategory() {
  * @post: categoryRef is set to the updated / created category
  */
 function saveCategory() {
-    const title = document.getElementById("category-title").value;
-    let parent = document.getElementById("category-parent").value;
-    if(parent == '') {
+    var title = document.getElementById("category-title").value;
+    var parent = document.getElementById("category-parent").value;
+    if (parent == '') {
         parent = null;
     }
-    if(title) {
-        if(categoryRef && categoryRef.key == parent) {
+    if (title) {
+        if (categoryRef && categoryRef.key == parent) {
             window.alert("Die Kategorie kann sich nicht selbst als Oberkategorie haben.");
             return;
         }
-        if(categoryRef == null) {
+        if (categoryRef == null) {
             categoryRef = firebase.database().ref('categories').push();
         }
 
-        let updatedObj = {};
+        var updatedObj = {};
         updatedObj["title"] = title;
         updatedObj["parent"] = parent;
         categoryRef.update(updatedObj);
         categoryRef = firebase.database().ref('categories/' + categoryRef.key);
-
     } else {
         window.alert("Bitte gib einen Titel für die Kategorie an.");
     }
-
-
 }
 
 /* Listener attachments */
-const saveCardButton = document.getElementById("card-controls-save");
+var saveCardButton = document.getElementById("card-controls-save");
 saveCardButton.addEventListener("click", saveCard);
 
 document.getElementById("card-controls-new").addEventListener("click", initCard);
@@ -471,11 +461,12 @@ document.getElementById("cards-new").addEventListener("click", initCard);
 document.getElementById("category-controls-new").addEventListener("click", initCategory);
 document.getElementById("categories-new").addEventListener("click", initCategory);
 
-const deleteCardButton = document.getElementById("card-controls-delete");
+var deleteCardButton = document.getElementById("card-controls-delete");
 deleteCardButton.addEventListener("click", deleteCard);
 
-const saveCategoryButton = document.getElementById("category-controls-save");
+var saveCategoryButton = document.getElementById("category-controls-save");
 saveCategoryButton.addEventListener("click", saveCategory);
 
-const deleteCategoryButton = document.getElementById("category-controls-delete");
+var deleteCategoryButton = document.getElementById("category-controls-delete");
 deleteCategoryButton.addEventListener("click", deleteCategory);
+//# sourceMappingURL=index.js.map
