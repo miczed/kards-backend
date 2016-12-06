@@ -88,13 +88,20 @@ button.transparent {
 
 button.button_main {
   border-radius: 50px;
-  border: 1px solid #F1F1F1;
+  border: 1px solid rgba(45, 45, 45, 0.15);
   background: white;
   color: rgba(45, 45, 45, 0.5);
-  box-shadow: 0 4px 10px rgba(45, 45, 45, 0.1);
   letter-spacing: 2px;
   margin-right: 15px;
-  font-weight: 600; }
+  font-weight: 600;
+  transition: all 200ms ease-out; }
+
+button.button_main:hover {
+  box-shadow: 0 4px 10px rgba(45, 45, 45, 0.1);
+  color: #2D2D2D; }
+
+button.red {
+  color: #E98686; }
 
 /* Main Container on the right side */
 #main {

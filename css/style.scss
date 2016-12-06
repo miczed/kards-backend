@@ -1,5 +1,5 @@
 $main-color: #2D2D2D;
-$sidebar-width: 500px;
+$warning-color: #E98686;
 
 * {
   box-sizing: border-box;
@@ -105,15 +105,24 @@ button.transparent {
   padding-bottom: 0px;
   margin-left: 5px;
 }
+
 button.button_main {
   border-radius: 50px;
-  border: 1px solid #F1F1F1;
+  border: 1px solid rgba($main-color, 0.15);
   background: white;
   color: rgba($main-color,0.5);
-  box-shadow: 0 4px 10px rgba($main-color,0.1);
   letter-spacing: 2px;
   margin-right: 15px;
   font-weight: 600;
+  transition: all 200ms ease-out;
+}
+button.button_main:hover {
+  box-shadow: 0 4px 10px rgba($main-color,0.1);
+  color: $main-color;
+}
+
+button.red {
+  color: $warning-color;
 }
 
 /* Main Container on the right side */
