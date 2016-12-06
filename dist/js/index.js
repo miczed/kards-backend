@@ -63,14 +63,9 @@ categoriesRef.on("value", function (snapshot) {
     var tree = buildTree(dataWithKeys);
     deleteChildren(document.getElementById("categories-list"));
     buildUlTree(tree, document.getElementById("categories-list"));
-    var dummy = { _key: "", title: "-- keine Kategorie --" };
-    dataWithKeys.unshift(dummy);
 
-    deleteChildren(document.getElementById("card-category"));
-    buildSelectTree(tree, document.getElementById("card-category"), "");
-
-    deleteChildren(document.getElementById("category-parent"));
-    buildSelectTree(tree, document.getElementById("category-parent"), "");
+    updateCategoriesSelect(tree, document.getElementById("card-category"));
+    updateCategoriesSelect(tree, document.getElementById("category-parent"));
 });
 
 /**
@@ -130,6 +125,9 @@ function buildSelectTree(obj, elem, indent) {
         node.setAttribute("value", obj[i]._key);
         node.appendChild(title);
         elem.appendChild(node);
+        if (cardRef && obj[i]._key == cardsStore[cardRef.key].category) {
+            node.setAttribute("selected", "selected");
+        }
         if (obj[i].children) {
             buildSelectTree(obj[i].children, elem, indent + "--");
         }
@@ -149,7 +147,11 @@ function buildUlTree(obj, elem) {
 
     for (var i = 0; i < obj.length; i++) {
         var node = document.createElement("LI");
-        var title = document.createTextNode(obj[i].title);
+        var cardCount = 0;
+        if (obj[i].cards) {
+            cardCount = Object.keys(obj[i].cards).length;
+        }
+        var title = document.createTextNode(obj[i].title + " (" + cardCount + ")");
         var button = document.createElement("BUTTON");
         var button_icon = document.createElement("SPAN");
         button_icon.setAttribute("class", "icon-pencil");
@@ -261,13 +263,14 @@ function updateCategoriesSelect(categoriesList, elem) {
         while (elem.hasChildNodes()) {
             elem.removeChild(elem.firstChild);
         }
-        for (var i = 0; i < categoriesList.length; i++) {
-            var node = document.createElement("OPTION");
-            var title = document.createTextNode(categoriesList[i].title);
-            node.setAttribute("value", categoriesList[i]._key);
-            node.appendChild(title);
-            elem.appendChild(node);
-        }
+        // Add empty node on top
+        var node = document.createElement("OPTION");
+        var title = document.createTextNode("-- nichts ausgewählt --");
+        node.appendChild(title);
+        node.setAttribute("value", "");
+        elem.appendChild(node);
+
+        buildSelectTree(categoriesList, elem, "");
     }
 }
 /**
@@ -359,6 +362,15 @@ function saveCard() {
             // Neue Karte wird erstellt
             cardRef = firebase.database().ref('cards').push();
         }
+
+        // Delete from old category when category is changed
+        if (cardsStore[cardRef.key]) {
+            var oldCategory = cardsStore[cardRef.key].category;
+            if (oldCategory != cat) {
+                firebase.database().ref('categories/' + oldCategory + "/cards/" + cardRef.key).remove();
+            }
+        }
+
         cardRef.set({
             front_delta: front.getContents(),
             front_html: document.querySelector("#front-editor .ql-editor").innerHTML,
