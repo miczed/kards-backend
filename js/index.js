@@ -74,15 +74,18 @@ categoriesRef.on("value", function(snapshot) {
     buildUlTree(tree,document.getElementById("categories-list"));
     const dummy = { _key: "", title: "-- keine Kategorie --"};
     dataWithKeys.unshift(dummy);
-    updateCategoriesSelect(dataWithKeys, document.getElementById("card-category"));
-    updateCategoriesSelect(dataWithKeys, document.getElementById("category-parent"));
 
+    deleteChildren(document.getElementById("card-category"));
+    buildSelectTree(tree,document.getElementById("card-category"),"");
+
+    deleteChildren(document.getElementById("category-parent"));
+    buildSelectTree(tree,document.getElementById("category-parent"),"");
 
 });
 
 /**
  * helper function to remove all children inside a DOM element
- * @param elem : element whose children should be removed
+ * @param elem : Element whose children should be removed
  */
 function deleteChildren(elem) {
     while (elem.hasChildNodes()) {
@@ -95,8 +98,8 @@ function deleteChildren(elem) {
  * Builds a tree from a flat array
  * @pre data objects must have empty children property children
  * @pre data objects parent property must point to the key of the parent or be empty
- * @param data {Array} of objects
- * @returns {Array}
+ * @param data : Array of objects
+ * @returns Array
  */
 function buildTree(data) {
     var dataMap = {};
@@ -121,11 +124,31 @@ function buildTree(data) {
     });
     return tree;
 }
+/**
+ * Renders a SELECT tree recursively
+ * @param obj : object that should be rendered (must be a tree with children attribute)
+ * @param elem : Element in which the object should be rendered
+ * @param indent : string that is in the beginning of the title output
+ */
+function buildSelectTree(obj,elem,indent) {
+    if(!obj) { return; }
+
+    for(let i = 0; i < obj.length; i++) {
+        let node = document.createElement("OPTION");
+        let title = document.createTextNode(indent + " " + obj[i].title);
+        node.setAttribute("value",obj[i]._key);
+        node.appendChild(title);
+        elem.appendChild(node);
+        if(obj[i].children) {
+            buildSelectTree(obj[i].children,elem,indent + "--");
+        }
+    }
+}
 
 /**
- * Renders a UL - LI recursively
+ * Renders a UL - LI tree recursively
  * @param obj : object that should be rendered (should be a tree with children attribute)
- * @param elem : element in which the object should be rendered
+ * @param elem : Element in which the object should be rendered
  */
 function buildUlTree(obj, elem) {
     if(!obj) { return; }
@@ -151,7 +174,7 @@ function buildUlTree(obj, elem) {
         });
 
         node.addEventListener("click", function () {
-            loadCardsByCategory(this.getAttribute("data-key"));
+            loadCardsByCategory(this.getAttribute("data-key"),(cards) => { updateCardsList(cards)});
             return true;
         });
 
@@ -166,7 +189,7 @@ function buildUlTree(obj, elem) {
 
 /**
  * Updates all dom elements which contain a list of cards
- * @param cardsList Array with cards
+ * @param cardsList : Array with cards
  */
 function updateCardsList(cardsList) {
     const cardsListElem = document.getElementById("cards-list");
@@ -181,6 +204,7 @@ function updateCardsList(cardsList) {
         let edit_button_icon = document.createElement("SPAN");
         edit_button_icon.setAttribute("class","icon-pencil");
         edit_button.appendChild(edit_button_icon);
+        node.setAttribute("data-key", cardsList[i]._key);
 
         edit_button.setAttribute("data-key", cardsList[i]._key);
         edit_button.setAttribute("class","transparent");
@@ -191,14 +215,20 @@ function updateCardsList(cardsList) {
            loadCard(this.getAttribute("data-key"));
            return true;
         });
+
+        node.addEventListener("click",function() {
+            loadCard(this.getAttribute("data-key"));
+            return true;
+        });
+
         cardsListElem.appendChild(node);
     }
 }
 
 /**
  * Updates a single UL DOM element with the list of categories
- * @param categoriesList
- * @param elem UL element
+ * @param categoriesList : Array
+ * @param elem Element (UL)
  */
 function updateCategoriesList(categoriesList, elem) {
     if(elem) {
@@ -228,8 +258,8 @@ function updateCategoriesList(categoriesList, elem) {
 }
 /**
  * Updates a single SELECT DOM element with the list of categories
- * @param categoriesList
- * @param elem SELECT DOM element
+ * @param categoriesList : Array
+ * @param elem : Element SELECT DOM element
  */
 function updateCategoriesSelect(categoriesList, elem) {
     if(elem) {
@@ -245,8 +275,13 @@ function updateCategoriesSelect(categoriesList, elem) {
         }
     }
 }
-
-function loadCardsByCategory(categoryKey) {
+/**
+ * Gets the cards from firebase that belong to the specified category
+ * @param categoryKey : String
+ * @param callback : Function which gets executed, when the promise is resolved
+ * @return Array list of cards
+ */
+function loadCardsByCategory(categoryKey,callback) {
     firebase.database().ref('cards').orderByChild('category').equalTo(categoryKey).once('value').then(function(snapshot) {
         if(snapshot.val()) {
             let data = snapshot.val();
@@ -256,7 +291,7 @@ function loadCardsByCategory(categoryKey) {
                 obj._key = key;
                 return obj;
             });
-            updateCardsList(dataWithKeys);
+            callback(dataWithKeys);
         }
     });
 }

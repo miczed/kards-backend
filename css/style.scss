@@ -1,5 +1,6 @@
 $main-color: #2D2D2D;
 $warning-color: #E98686;
+$error-color: #BE4040;
 
 * {
   box-sizing: border-box;
@@ -60,7 +61,7 @@ h3 {
   box-shadow: 4px 0 5px rgba($main-color,0.10);
   position: fixed;
   height: 100%;
-
+  overflow-y: scroll;
   ul {
     padding-left: 0;
     list-style-type: none;
@@ -70,6 +71,9 @@ h3 {
       cursor: pointer;
       line-height: 25px;
       min-height: 25px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       ul {
         padding-left: 20px;
         list-style-type: circle;
@@ -123,6 +127,9 @@ button.button_main:hover {
 
 button.red {
   color: $warning-color;
+}
+button.red:hover {
+  color: $error-color;
 }
 
 /* Main Container on the right side */
