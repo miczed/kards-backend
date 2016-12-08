@@ -151,7 +151,8 @@ function buildUlTree(obj, elem) {
         if (obj[i].cards) {
             cardCount = Object.keys(obj[i].cards).length;
         }
-        var title = document.createTextNode(obj[i].title + " (" + cardCount + ")");
+        var title = document.createTextNode(obj[i].title);
+
         var button = document.createElement("BUTTON");
         var button_icon = document.createElement("SPAN");
         button_icon.setAttribute("class", "icon-pencil");
@@ -161,7 +162,16 @@ function buildUlTree(obj, elem) {
         node.setAttribute("data-key", obj[i]._key);
         button.setAttribute("class", "transparent");
         node.appendChild(title);
+
         node.appendChild(button);
+
+        if (obj[i].children && obj[i].children.length == 0) {
+            var pill = document.createElement("SPAN");
+            var pill_text = document.createTextNode(cardCount);
+            pill.appendChild(pill_text);
+            pill.setAttribute("class", "pill");
+            node.appendChild(pill);
+        }
 
         button.addEventListener("click", function () {
             loadCategory(this.getAttribute("data-key"));
