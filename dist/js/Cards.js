@@ -36,6 +36,17 @@ var Cards = function () {
         value: function getCardRef(cardKey) {
             return this.firebaseApp.database().ref('cards/' + cardKey);
         }
+        /**
+         * Returns the firebase reference to the progress of a card
+         * @param cardKey : String key of the card
+         * @returns {*} reference to the firebase object
+         */
+
+    }, {
+        key: 'getCardProgressRef',
+        value: function getCardProgressRef(cardKey) {
+            return this.firebaseApp.database().ref('progress/' + cardKey);
+        }
 
         /**
          * Gets all the cards that are in the specified key's category
@@ -82,6 +93,82 @@ var Cards = function () {
                 }
                 callback(item);
             });
+        }
+
+        /**
+         * Gets the progress of a card specified by it's key, gets 0 if no progress is set
+         * @param cardKey : String key of the card
+         * @param callback : Function that get called when promise is resolved
+         */
+
+    }, {
+        key: 'getCardProgress',
+        value: function getCardProgress(cardKey, callback) {
+            var progressRef = this.getCardProgressRef(cardKey).child('progress');
+            progressRef.once('value', function (snapshot) {
+                var item = 0;
+                if (snapshot.val()) {
+                    item = snapshot.val();
+                }
+                callback(item);
+            });
+        }
+
+        /**
+         * Increases the progress of a card
+         * @param cardKey : String key of the card
+         */
+
+    }, {
+        key: 'increaseCardProgress',
+        value: function increaseCardProgress(cardKey) {
+            // TESTED
+            var progressRef = this.getCardProgressRef(cardKey).child('progress');
+            progressRef.transaction(function (current_value) {
+                if (!current_value) {
+                    return 1;
+                }
+                if (current_value <= 0) {
+                    return 1;
+                } else {
+                    return current_value + 1;
+                }
+            });
+        }
+        /**
+         * Decreases the progress of a card
+         * @param cardKey : String key of the card
+         */
+
+    }, {
+        key: 'decreaseCardProgress',
+        value: function decreaseCardProgress(cardKey) {
+            // TESTED
+            var progressRef = this.getCardProgressRef(cardKey).child('progress');
+            progressRef.transaction(function (current_value) {
+                if (!current_value) {
+                    return -1;
+                }
+                if (current_value >= 0) {
+                    return -1;
+                } else {
+                    return current_value - 1;
+                }
+            });
+        }
+
+        /**
+         * Resets the progress of a card to zero
+         * @param cardKey : String key of the card
+         */
+
+    }, {
+        key: 'resetCardProgress',
+        value: function resetCardProgress(cardKey) {
+            // TESTED
+            var updates = {};
+            updates['progress'] = 0;
+            this.getCardProgressRef(cardKey).update(updates);
         }
     }]);
 

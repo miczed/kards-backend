@@ -8,7 +8,8 @@ var toolbarOptions = [['bold', 'italic', 'underline', 'strike'], // toggled butt
 ['blockquote', 'code-block'], [{ 'list': 'ordered' }, { 'list': 'bullet' }], [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
 
 [{ 'header': [1, 2, false] }], [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
-[{ 'align': [] }], ['formula', 'image', 'video'], ['clean'] // clean styling button
+
+['formula', 'image', 'video'], ['clean'] // clean styling button
 
 ];
 
@@ -21,6 +22,8 @@ var back = new Quill('#back-editor', {
     modules: { formula: true, toolbar: toolbarOptions },
     theme: 'snow'
 });
+
+var cardsProvider = new Cards(firebase);
 
 // Global cards store
 var cardsStore = []; // Stores all cards locally in the browser (later via localstorage)

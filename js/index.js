@@ -29,6 +29,7 @@ const back = new Quill('#back-editor', {
 });
 
 
+let cardsProvider = new Cards(firebase);
 
 // Global cards store
 let cardsStore = []; // Stores all cards locally in the browser (later via localstorage)
