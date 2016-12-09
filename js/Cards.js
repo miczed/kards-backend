@@ -21,6 +21,7 @@ class Cards {
     getCardRef(cardKey) {
         return this.firebaseApp.database().ref('cards/' + cardKey);
     }
+
     /**
      * Returns the firebase reference to the progress of a card
      * @param cardKey : String key of the card
@@ -127,4 +128,5 @@ class Cards {
         updates['progress'] = 0;
         this.getCardProgressRef(cardKey).update(updates);
     }
+
 }

@@ -30,6 +30,11 @@ const back = new Quill('#back-editor', {
 
 
 let cardsProvider = new Cards(firebase);
+let categoriesProvider = new Categories(firebase);
+
+categoriesProvider.getCategoryProgressGroups('-KXuyoLUPxH-XGIDZkIY',(joint) => {
+    console.log(joint);
+});
 
 // Global cards store
 let cardsStore = []; // Stores all cards locally in the browser (later via localstorage)

@@ -36,6 +36,7 @@ var Cards = function () {
         value: function getCardRef(cardKey) {
             return this.firebaseApp.database().ref('cards/' + cardKey);
         }
+
         /**
          * Returns the firebase reference to the progress of a card
          * @param cardKey : String key of the card

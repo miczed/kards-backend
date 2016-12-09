@@ -116,6 +116,7 @@ h3 {
         border-radius: 20px;
         font-weight: 700;
         font-size: 12px;
+        top: 3px;
         color: $sub-color;
       }
       ul {
@@ -236,8 +237,9 @@ button.red:hover {
   margin-bottom: 0px;
 }
 
-#back .ql-container, #front .ql-container {
+#back .ql-container .ql-editor, #front .ql-container .ql-editor {
   font-family: 'Merriweather', serif;
+  line-height: 1.8;
 }
 
 /* Pure CSS Loading Animation */

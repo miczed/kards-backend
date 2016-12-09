@@ -24,6 +24,11 @@ var back = new Quill('#back-editor', {
 });
 
 var cardsProvider = new Cards(firebase);
+var categoriesProvider = new Categories(firebase);
+
+categoriesProvider.getCategoryProgressGroups('-KXuyoLUPxH-XGIDZkIY', function (joint) {
+    console.log(joint);
+});
 
 // Global cards store
 var cardsStore = []; // Stores all cards locally in the browser (later via localstorage)

@@ -1,5 +1,7 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38,6 +40,17 @@ var Categories = function () {
         key: 'getCategoryRef',
         value: function getCategoryRef(catKey) {
             return this.firebaseApp.database().ref('categories/' + catKey);
+        }
+
+        /**
+         * Returns the firebase reference to the progress
+         * @returns {*} reference to the firebase object
+         */
+
+    }, {
+        key: 'getProgressRef',
+        value: function getProgressRef() {
+            return this.firebaseApp.database().ref('progress');
         }
 
         /**
@@ -112,6 +125,74 @@ var Categories = function () {
                     })();
                 }
                 callback(items);
+            });
+        }
+
+        /**
+         * Helper function that merges two firebase objects with the same key together
+         * @param base : object into which the data should be merged
+         * @returns {*} merged object
+         */
+
+    }, {
+        key: 'extend',
+        value: function extend(base) {
+            var parts = Array.prototype.slice.call(arguments, 1);
+            parts.forEach(function (p) {
+                if (p && (typeof p === 'undefined' ? 'undefined' : _typeof(p)) === 'object') {
+                    for (var k in p) {
+                        if (p.hasOwnProperty(k)) {
+                            base[k] = p[k];
+                        }
+                    }
+                }
+            });
+            return base;
+        }
+
+        /**
+         * Returns the progress for each card in the specified category
+         * @param catKey : String key for the category
+         * @param callback : Function that gets called when promises are resolved
+         */
+
+    }, {
+        key: 'getCategoryProgress',
+        value: function getCategoryProgress(catKey, callback) {
+            var _this2 = this;
+
+            var progressRef = this.getProgressRef();
+            var cardsRef = this.getCategoryRef(catKey).child('cards');
+            cardsRef.once("value", function (cardsSnapshot) {
+                progressRef.once("value", function (progressSnapshot) {
+                    var joint = _this2.extend({}, cardsSnapshot.val(), progressSnapshot.val());
+                    callback(joint);
+                });
+            });
+        }
+    }, {
+        key: 'getCategoryProgressGroups',
+        value: function getCategoryProgressGroups(catKey, callback) {
+            this.getCategoryProgress(catKey, function (progress) {
+                var veryhard = [];
+                var hard = [];
+                var normal = [];
+                var learned = [];
+                for (var property in progress) {
+                    if (progress.hasOwnProperty(property)) {
+                        if (property.progress < -2) {
+                            veryhard.push(property);
+                        } else if (property.progress == -1) {
+                            hard.push(property);
+                        } else if (property.progress >= 2) {
+                            learned.push(property);
+                        } else {
+                            normal.push(property);
+                        }
+                    }
+                    var progresses = { 'veryhard': veryhard, 'hard': hard, 'normal': normal, 'learned': learned };
+                    callback(progresses);
+                }
             });
         }
     }]);

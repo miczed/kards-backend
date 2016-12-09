@@ -67,7 +67,7 @@ h3 {
   position: fixed;
   height: 100%;
   overflow-y: scroll;
-  background: #F9F9F9;
+  background: #FAFAFA;
   border-right: 1px solid rgba(45, 45, 45, 0.15); }
   #sidebar #categories-list {
     margin-bottom: 15px; }
@@ -96,6 +96,7 @@ h3 {
         border-radius: 20px;
         font-weight: 700;
         font-size: 12px;
+        top: 3px;
         color: #969696; }
       #sidebar ul li ul {
         padding-left: 20px;
@@ -192,8 +193,9 @@ button.red:hover {
   display: block;
   margin-bottom: 0px; }
 
-#back .ql-container, #front .ql-container {
-  font-family: 'Merriweather', serif; }
+#back .ql-container .ql-editor, #front .ql-container .ql-editor {
+  font-family: 'Merriweather', serif;
+  line-height: 1.8; }
 
 /* Pure CSS Loading Animation */
 .loading-dots {
