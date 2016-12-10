@@ -26,7 +26,8 @@ var back = new Quill('#back-editor', {
 var cardsProvider = new Cards(firebase);
 var categoriesProvider = new Categories(firebase);
 
-categoriesProvider.getCategoryProgressGroups('-KXuyoLUPxH-XGIDZkIY', function (joint) {
+categoriesProvider.getCategoryProgressGroups('-KYKBbjT6cBqAbFY87AV', function (joint) {
+    // //-KXuyoLUPxH-XGIDZkIY
     console.log(joint);
 });
 
