@@ -33,6 +33,10 @@ class Categories {
         return this.firebaseApp.database().ref('progress');
     }
 
+    getCategoryRefByParent(parentKey) {
+        return this.getCategoriesRef().orderByChild("parent").equalTo(parentKey);
+    }
+
     /**
      * Gets all the categories that are children of the specified key's category
      * @param parentKey : String key of the parent category
@@ -151,36 +155,56 @@ class Categories {
     }
 
     /**
-     * Gets the progress for all cards in a specified category and groups them in an object with the following attributes:
+     * Returns the progress for all cards
+     * @param callback : Function that gets called when the promise is resolved
+     */
+    getProgress(callback) {
+        let progressRef = this.getProgressRef();
+        progressRef.once("value", (progressSnap) => {
+            if(progressSnap.val()) {
+                callback(progressSnap.val());
+            } else {
+                callback(null);
+            }
+        });
+    }
+
+    /**
+     * Formats a joined progress object into the following groups:
      * - veryhard: 2 or more times wrong in a row
      * - hard: 1 time wrong in a row
      * - normal: zero or 1 time right in a row
      * - learned: two times right in a row
-     * @param catKey : String key of the category
-     * @param callback : function that gets called when the promise is resolved
+     * @param progress : Object with the cards as keys
+     * @return progresses : Object with the specified attributes above
      */
-    getCategoryProgressGroups(catKey, callback) {
-        this.getCategoryProgress(catKey,(progress)=> {
+    getCategoryProgressGroups(progress) {
+        if(progress) {
             let veryhard = {};
             let hard = {};
             let normal = {};
             let learned = {};
-            for (let key in progress) {
+            let unviewed = {};
+            Object.keys(progress).forEach(function(key) {
+                let val = progress[key];
                 if (progress.hasOwnProperty(key)) {
-                    if(progress[key].progress < -2) {
-                        veryhard[key] = progress[key];
-                    } else if(progress[key].progress == -1 ) {
-                        hard[key] = progress[key];
-                    } else if (progress[key].progress >= 2) {
-                        learned[key] = progress[key];
+                    if (val.progress <= -2) {
+                        veryhard[key] = val;
+                    } else if (val.progress == -1) {
+                        hard[key] = val
+                    } else if (val.progress >= 2) {
+                        learned[key] = val
+                    } else if (val.progress == 1) {
+                        normal[key] = val
                     } else { // Progress is not set or zero
-                        normal[key] = progress[key];
+                        unviewed[key] = val
                     }
                 }
-                let progresses = { 'veryhard': veryhard, 'hard': hard,'normal': normal, 'learned': learned};
-                callback(progresses);
-            }
-        })
+            });
+            return {'veryhard': veryhard, 'hard': hard, 'normal': normal, 'learned': learned, 'unviewed': unviewed};
+        } else {
+            return null;
+        }
     }
 
 }

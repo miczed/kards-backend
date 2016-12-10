@@ -32,7 +32,7 @@ const back = new Quill('#back-editor', {
 let cardsProvider = new Cards(firebase);
 let categoriesProvider = new Categories(firebase);
 
-categoriesProvider.getCategoryProgressGroups('-KYKBbjT6cBqAbFY87AV',(joint) => { // //-KXuyoLUPxH-XGIDZkIY
+categoriesProvider.getCategoryProgressGroups('-KYYx9Sgp9KGbzhLENdk',(joint) => { // //-KXuyoLUPxH-XGIDZkIY
     console.log(joint);
 });
 

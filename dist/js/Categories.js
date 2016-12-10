@@ -52,6 +52,11 @@ var Categories = function () {
         value: function getProgressRef() {
             return this.firebaseApp.database().ref('progress');
         }
+    }, {
+        key: 'getCategoryRefByParent',
+        value: function getCategoryRefByParent(parentKey) {
+            return this.getCategoriesRef().orderByChild("parent").equalTo(parentKey);
+        }
 
         /**
          * Gets all the categories that are children of the specified key's category
@@ -199,40 +204,69 @@ var Categories = function () {
         }
 
         /**
-         * Gets the progress for all cards in a specified category and groups them in an object with the following attributes:
+         * Returns the progress for all cards
+         * @param callback : Function that gets called when the promise is resolved
+         */
+
+    }, {
+        key: 'getProgress',
+        value: function getProgress(callback) {
+            var progressRef = this.getProgressRef();
+            progressRef.once("value", function (progressSnap) {
+                if (progressSnap.val()) {
+                    callback(progressSnap.val());
+                } else {
+                    callback(null);
+                }
+            });
+        }
+
+        /**
+         * Formats a joined progress object into the following groups:
          * - veryhard: 2 or more times wrong in a row
          * - hard: 1 time wrong in a row
          * - normal: zero or 1 time right in a row
          * - learned: two times right in a row
-         * @param catKey : String key of the category
-         * @param callback : function that gets called when the promise is resolved
+         * @param progress : Object with the cards as keys
+         * @return progresses : Object with the specified attributes above
          */
 
     }, {
         key: 'getCategoryProgressGroups',
-        value: function getCategoryProgressGroups(catKey, callback) {
-            this.getCategoryProgress(catKey, function (progress) {
-                var veryhard = {};
-                var hard = {};
-                var normal = {};
-                var learned = {};
-                for (var key in progress) {
-                    if (progress.hasOwnProperty(key)) {
-                        if (progress[key].progress < -2) {
-                            veryhard[key] = progress[key];
-                        } else if (progress[key].progress == -1) {
-                            hard[key] = progress[key];
-                        } else if (progress[key].progress >= 2) {
-                            learned[key] = progress[key];
-                        } else {
-                            // Progress is not set or zero
-                            normal[key] = progress[key];
+        value: function getCategoryProgressGroups(progress) {
+            if (progress) {
+                var _ret3 = function () {
+                    var veryhard = {};
+                    var hard = {};
+                    var normal = {};
+                    var learned = {};
+                    var unviewed = {};
+                    Object.keys(progress).forEach(function (key) {
+                        var val = progress[key];
+                        if (progress.hasOwnProperty(key)) {
+                            if (val.progress <= -2) {
+                                veryhard[key] = val;
+                            } else if (val.progress == -1) {
+                                hard[key] = val;
+                            } else if (val.progress >= 2) {
+                                learned[key] = val;
+                            } else if (val.progress == 1) {
+                                normal[key] = val;
+                            } else {
+                                // Progress is not set or zero
+                                unviewed[key] = val;
+                            }
                         }
-                    }
-                    var progresses = { 'veryhard': veryhard, 'hard': hard, 'normal': normal, 'learned': learned };
-                    callback(progresses);
-                }
-            });
+                    });
+                    return {
+                        v: { 'veryhard': veryhard, 'hard': hard, 'normal': normal, 'learned': learned, 'unviewed': unviewed }
+                    };
+                }();
+
+                if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
+            } else {
+                return null;
+            }
         }
     }]);
 
