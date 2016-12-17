@@ -194,8 +194,9 @@ button.red:hover {
   margin-bottom: 0px; }
 
 #back .ql-container .ql-editor, #front .ql-container .ql-editor {
-  font-family: 'Merriweather', serif;
-  line-height: 1.8; }
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: 1.8;
+  font-size: 15px; }
 
 /* Pure CSS Loading Animation */
 .loading-dots {
