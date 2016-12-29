@@ -47,7 +47,7 @@ let categoriesRef = firebase.database().ref('categories'); // Reference to ALL t
 /**
  * Called initially and whenever firebase detects a change on a cards object
  */
-cardsRef.on('value', function(snapshot) {
+/*cardsRef.on('value', function(snapshot) {
     let data = snapshot.val();
     cardsStore = snapshot.val(); // Store returned data in global cards store
     let dataWithKeys = Object.keys(data).map((key) => {
@@ -56,7 +56,8 @@ cardsRef.on('value', function(snapshot) {
         return obj;
     });
     updateCardsList(dataWithKeys);
-});
+});*/
+
 /**
  * Called initially and whenever firebase detects a change on a category object
  */
@@ -73,7 +74,6 @@ categoriesRef.on("value", function(snapshot) {
             return obj;
         });
     }
-    //updateCategoriesList(dataWithKeys, document.getElementById("categories-list"));
     let tree = buildTree(dataWithKeys);
     deleteChildren(document.getElementById("categories-list"));
     buildUlTree(tree,document.getElementById("categories-list"));
@@ -139,7 +139,7 @@ function buildSelectTree(obj,elem,indent) {
         node.setAttribute("value",obj[i]._key);
         node.appendChild(title);
         elem.appendChild(node);
-        if(cardRef && obj[i]._key == cardsStore[cardRef.key].category) {
+        if( (cardRef && obj[i]._key == cardsStore[cardRef.key].category )) {
             node.setAttribute("selected","selected");
         }
         if(obj[i].children) {
@@ -174,7 +174,12 @@ function buildUlTree(obj, elem) {
         button.setAttribute("data-key", obj[i]._key);
         wrapper.setAttribute("data-key", obj[i]._key);
         button.setAttribute("class","transparent");
-        $(wrapper).append("<div class='title'>" + obj[i].title +"</div>");
+
+        let div = document.createElement("DIV");
+        $(div).text(obj[i].title);
+        $(div).addClass('title');
+
+        $(wrapper).append(div);
 
         wrapper.appendChild(button);
 
@@ -185,6 +190,20 @@ function buildUlTree(obj, elem) {
             pill.appendChild(pill_text);
             pill.setAttribute("class", "pill");
             wrapper.appendChild(pill);
+
+            wrapper.addEventListener("click", function () {
+                $('#categories-list .active').toggleClass('active');
+                $(this).find('.title').addClass('active');
+                let key = this.getAttribute("data-key");
+                categoryRef = firebase.database().ref('categories/' + key);
+                loadCardsList(key);
+                return true;
+            });
+
+        } else { // is parent object
+            $(div).on('click',function() {
+                $(this).parent().siblings("ul").slideToggle('fast');
+            })
         }
 
 
@@ -193,83 +212,77 @@ function buildUlTree(obj, elem) {
             return true;
         });
 
-        wrapper.addEventListener("click", function () {
-            loadCardsByCategory(this.getAttribute("data-key"),(cards) => { updateCardsList(cards)});
-            return true;
-        });
+
         node.appendChild(wrapper);
-        
+
         if(obj[i].children && obj[i].children.length > 0) {
             buildUlTree(obj[i].children, node);
+            $(node).find('ul').toggle();
         }
         $(wrapper).addClass('category-wrapper');
 
 
         ul.appendChild(node);
+
+        // Category is currently selected
+        if(categoryRef && obj[i]._key == categoryRef.key) {
+            $(div).addClass('active');
+            $(ul).toggle();
+        }
+
+
     }
     elem.appendChild(ul);
 }
 
 /**
- * Updates all dom elements which contain a list of cards
- * @param cardsList : Array with cards
+ * Gets the cards from the specified category and displays them in the DOM
+ * @param key : Key of the category
  */
-function updateCardsList(cardsList) {
+function loadCardsList(key) {
+    // Delete existing list in DOM
     const cardsListElem = document.getElementById("cards-list");
     while (cardsListElem.hasChildNodes()) {
         cardsListElem.removeChild(cardsListElem.firstChild);
     }
 
-    for(let i = 0; i < cardsList.length; i++) {
-        let node = document.createElement("LI");
-        let title = document.createTextNode(cardsList[i].title);
+    // Show loader
+    $("#cards-loader").fadeIn('fast');
 
-        node.setAttribute("data-key", cardsList[i]._key);
+    //load cards from server
+    loadCardsByCategory(key,(cardsList) => {
+        // hide loader
+        $("#cards-loader").fadeOut('fast');
 
-        node.appendChild(title);
+        // populate DOM with data
+        if(cardsList) {
+            for (let i = 0; i < cardsList.length; i++) {
+                let node = document.createElement("LI");
+                let title = document.createTextNode(cardsList[i].title);
 
-        node.addEventListener("click",function() {
-            $('#cards-list .active').toggleClass('active');
-            $(this).addClass('active');
-            loadCard(this.getAttribute("data-key"));
-            return true;
-        });
+                node.setAttribute("data-key", cardsList[i]._key);
 
-        cardsListElem.appendChild(node);
-    }
+                node.appendChild(title);
+                if (cardRef && cardRef.key == cardsList[i]._key) { // Card is selected
+                    $(node).addClass('active');
+                }
+                node.addEventListener("click", function () {
+                    $('#cards-list .active').toggleClass('active');
+                    $(this).addClass('active');
+                    loadCard(this.getAttribute("data-key"));
+                    return true;
+                });
+
+                cardsListElem.appendChild(node);
+            }
+        } else {
+            $(cardsListElem).append('<li class="empty-state">Keine Karten</li>')
+        }
+
+    });
+
 }
 
-/**
- * Updates a single UL DOM element with the list of categories
- * @param categoriesList : Array
- * @param elem Element (UL)
- */
-function updateCategoriesList(categoriesList, elem) {
-    if(elem) {
-        while (elem.hasChildNodes()) {
-            elem.removeChild(elem.firstChild);
-        }
-        for (let i = 0; i < categoriesList.length; i++) {
-            let node = document.createElement("LI");
-            let title = document.createTextNode(categoriesList[i].title);
-            let button = document.createElement("BUTTON");
-            let button_icon = document.createElement("SPAN");
-            button_icon.setAttribute("class","icon-pencil");
-            button.appendChild(button_icon);
-
-            button.setAttribute("data-key", categoriesList[i]._key);
-            button.setAttribute("class","transparent");
-            node.appendChild(title);
-            node.appendChild(button);
-
-            button.addEventListener("click", function () {
-                loadCategory(this.getAttribute("data-key"));
-                return true;
-            });
-            elem.appendChild(node);
-        }
-    }
-}
 /**
  * Updates a single SELECT DOM element with the list of categories
  * @param categoriesList : Array
@@ -308,6 +321,8 @@ function loadCardsByCategory(categoryKey,callback) {
                 return obj;
             });
             callback(dataWithKeys);
+        } else {
+            callback(null);
         }
     });
 }
@@ -341,28 +356,16 @@ function loadCategory(key) {
  * Shows the card container and hides the categories container
  */
 function showCardContainer() {
-    const cardContainer = document.getElementById("card");
-    const categoryContainer = document.getElementById("category");
-    if(cardContainer.getAttribute("class") == "hide") {
-        cardContainer.setAttribute("class","show");
-    }
-    if(categoryContainer.getAttribute("class") == "show") {
-        categoryContainer.setAttribute("class","hide");
-    }
+    $('#category').fadeOut('fast');
+    $("#card").fadeIn('fast');
 }
 
 /**
  * Shows the category container and hides the card container
  */
 function showCategoryContainer() {
-    const cardContainer = document.getElementById("card");
-    const categoryContainer = document.getElementById("category");
-    if(cardContainer.getAttribute("class") == "show") {
-        cardContainer.setAttribute("class","hide");
-    }
-    if(categoryContainer.getAttribute("class") == "hide") {
-        categoryContainer.setAttribute("class","show");
-    }
+    $('#category').fadeIn('fast');
+    $("#card").fadeOut('fast');
 }
 
 /**
@@ -385,7 +388,6 @@ function saveCard() {
                 firebase.database().ref('categories/' + oldCategory + "/cards/" + cardRef.key).remove();
             }
         }
-
         cardRef.set({
             front_delta: front.getContents(),
             front_html: document.querySelector("#front-editor .ql-editor").innerHTML,
@@ -406,6 +408,7 @@ function saveCard() {
         catRef.update(updatedObj);
 
         cardRef = firebase.database().ref('cards/' + cardRef.key);
+        loadCardsList(cat); // update dom list
     } else {
         window.alert("Bitte gib einen Titel und eine Kategorie für die Karte an.");
     }
@@ -418,7 +421,12 @@ function initCard(event) {
     showCardContainer();
     cardRef = null;
 
-    document.getElementById("card-category").value = "";
+    if(categoryRef) {
+        document.getElementById("card-category").value = categoryRef.key;
+        console.log(categoryRef.key);
+    } else {
+        document.getElementById("card-category").value = "";
+    }
     document.getElementById("card-title").value = "";
 
     front.setText("");
@@ -453,6 +461,7 @@ function deleteCard() {
             catRef.update(updatedObj);
             cardRef.remove();
             initCard();
+            loadCardsList(categoryRef.key);
         }
     } else {
         window.alert("Bitte wähle eine Karte aus, welche du löschen willst.");
