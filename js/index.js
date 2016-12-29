@@ -9,7 +9,7 @@ const toolbarOptions = [
     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
     [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
 
-    [{ 'header': [1, 2, false] }],
+    /*[{ 'header': [1, 2, false] }],*/
 
     [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
 
@@ -154,17 +154,17 @@ function buildSelectTree(obj,elem,indent) {
  * @param elem : Element in which the object should be rendered
  */
 function buildUlTree(obj, elem) {
-    if(!obj) { return; }
+    if(!obj || obj.length == 0) { return; }
     let ul = document.createElement("UL");
 
     for(let i=0; i < obj.length; i++) {
         let node = document.createElement("LI");
+        let wrapper = document.createElement("DIV");
+
         let cardCount = 0;
         if(obj[i].cards) {
             cardCount = Object.keys(obj[i].cards).length;
         }
-        let title = document.createTextNode(obj[i].title);
-
 
         let button = document.createElement("BUTTON");
         let button_icon = document.createElement("SPAN");
@@ -172,18 +172,19 @@ function buildUlTree(obj, elem) {
         button.appendChild(button_icon);
 
         button.setAttribute("data-key", obj[i]._key);
-        node.setAttribute("data-key", obj[i]._key);
+        wrapper.setAttribute("data-key", obj[i]._key);
         button.setAttribute("class","transparent");
-        node.appendChild(title);
+        $(wrapper).append("<div class='title'>" + obj[i].title +"</div>");
 
-        node.appendChild(button);
+        wrapper.appendChild(button);
+
 
         if(obj[i].children && obj[i].children.length == 0) {
             let pill = document.createElement("SPAN");
             let pill_text = document.createTextNode(cardCount);
             pill.appendChild(pill_text);
             pill.setAttribute("class", "pill");
-            node.appendChild(pill);
+            wrapper.appendChild(pill);
         }
 
 
@@ -192,14 +193,17 @@ function buildUlTree(obj, elem) {
             return true;
         });
 
-        node.addEventListener("click", function () {
+        wrapper.addEventListener("click", function () {
             loadCardsByCategory(this.getAttribute("data-key"),(cards) => { updateCardsList(cards)});
             return true;
         });
-
-        if(obj[i].children) {
+        node.appendChild(wrapper);
+        
+        if(obj[i].children && obj[i].children.length > 0) {
             buildUlTree(obj[i].children, node);
         }
+        $(wrapper).addClass('category-wrapper');
+
 
         ul.appendChild(node);
     }
@@ -219,23 +223,14 @@ function updateCardsList(cardsList) {
     for(let i = 0; i < cardsList.length; i++) {
         let node = document.createElement("LI");
         let title = document.createTextNode(cardsList[i].title);
-        let edit_button = document.createElement("BUTTON");
-        let edit_button_icon = document.createElement("SPAN");
-        edit_button_icon.setAttribute("class","icon-pencil");
-        edit_button.appendChild(edit_button_icon);
+
         node.setAttribute("data-key", cardsList[i]._key);
 
-        edit_button.setAttribute("data-key", cardsList[i]._key);
-        edit_button.setAttribute("class","transparent");
         node.appendChild(title);
-        node.appendChild(edit_button);
-
-        edit_button.addEventListener("click",function() {
-           loadCard(this.getAttribute("data-key"));
-           return true;
-        });
 
         node.addEventListener("click",function() {
+            $('#cards-list .active').toggleClass('active');
+            $(this).addClass('active');
             loadCard(this.getAttribute("data-key"));
             return true;
         });
@@ -397,7 +392,8 @@ function saveCard() {
             back_delta: back.getContents(),
             back_html: document.querySelector("#back-editor .ql-editor").innerHTML,
             title: title,
-            category: cat
+            category: cat,
+            modifiedAt: firebase.database.ServerValue.TIMESTAMP,
         }).then(()=> {
             // TODO: add some sort of notification
         });
@@ -536,6 +532,10 @@ saveCardButton.addEventListener("click", saveCard);
 
 document.getElementById("card-controls-new").addEventListener("click", initCard);
 document.getElementById("cards-new").addEventListener("click", initCard);
+$('#cards-new').on('click',() =>{
+    $('#cards-list .active').toggleClass('active');
+    initCard();
+});
 
 document.getElementById("category-controls-new").addEventListener("click", initCategory);
 document.getElementById("categories-new").addEventListener("click", initCategory);

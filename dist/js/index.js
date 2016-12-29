@@ -7,7 +7,9 @@
 var toolbarOptions = [['bold', 'italic', 'underline', 'strike'], // toggled buttons
 ['blockquote', 'code-block'], [{ 'list': 'ordered' }, { 'list': 'bullet' }], [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
 
-[{ 'header': [1, 2, false] }], [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
+/*[{ 'header': [1, 2, false] }],*/
+
+[{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
 
 ['formula', 'image', 'video'], ['clean'] // clean styling button
 
@@ -149,18 +151,19 @@ function buildSelectTree(obj, elem, indent) {
  * @param elem : Element in which the object should be rendered
  */
 function buildUlTree(obj, elem) {
-    if (!obj) {
+    if (!obj || obj.length == 0) {
         return;
     }
     var ul = document.createElement("UL");
 
     for (var i = 0; i < obj.length; i++) {
         var node = document.createElement("LI");
+        var wrapper = document.createElement("DIV");
+
         var cardCount = 0;
         if (obj[i].cards) {
             cardCount = Object.keys(obj[i].cards).length;
         }
-        var title = document.createTextNode(obj[i].title);
 
         var button = document.createElement("BUTTON");
         var button_icon = document.createElement("SPAN");
@@ -168,18 +171,18 @@ function buildUlTree(obj, elem) {
         button.appendChild(button_icon);
 
         button.setAttribute("data-key", obj[i]._key);
-        node.setAttribute("data-key", obj[i]._key);
+        wrapper.setAttribute("data-key", obj[i]._key);
         button.setAttribute("class", "transparent");
-        node.appendChild(title);
+        $(wrapper).append("<div class='title'>" + obj[i].title + "</div>");
 
-        node.appendChild(button);
+        wrapper.appendChild(button);
 
         if (obj[i].children && obj[i].children.length == 0) {
             var pill = document.createElement("SPAN");
             var pill_text = document.createTextNode(cardCount);
             pill.appendChild(pill_text);
             pill.setAttribute("class", "pill");
-            node.appendChild(pill);
+            wrapper.appendChild(pill);
         }
 
         button.addEventListener("click", function () {
@@ -187,16 +190,18 @@ function buildUlTree(obj, elem) {
             return true;
         });
 
-        node.addEventListener("click", function () {
+        wrapper.addEventListener("click", function () {
             loadCardsByCategory(this.getAttribute("data-key"), function (cards) {
                 updateCardsList(cards);
             });
             return true;
         });
+        node.appendChild(wrapper);
 
-        if (obj[i].children) {
+        if (obj[i].children && obj[i].children.length > 0) {
             buildUlTree(obj[i].children, node);
         }
+        $(wrapper).addClass('category-wrapper');
 
         ul.appendChild(node);
     }
@@ -216,23 +221,14 @@ function updateCardsList(cardsList) {
     for (var i = 0; i < cardsList.length; i++) {
         var node = document.createElement("LI");
         var title = document.createTextNode(cardsList[i].title);
-        var edit_button = document.createElement("BUTTON");
-        var edit_button_icon = document.createElement("SPAN");
-        edit_button_icon.setAttribute("class", "icon-pencil");
-        edit_button.appendChild(edit_button_icon);
+
         node.setAttribute("data-key", cardsList[i]._key);
 
-        edit_button.setAttribute("data-key", cardsList[i]._key);
-        edit_button.setAttribute("class", "transparent");
         node.appendChild(title);
-        node.appendChild(edit_button);
-
-        edit_button.addEventListener("click", function () {
-            loadCard(this.getAttribute("data-key"));
-            return true;
-        });
 
         node.addEventListener("click", function () {
+            $('#cards-list .active').toggleClass('active');
+            $(this).addClass('active');
             loadCard(this.getAttribute("data-key"));
             return true;
         });
@@ -396,7 +392,8 @@ function saveCard() {
             back_delta: back.getContents(),
             back_html: document.querySelector("#back-editor .ql-editor").innerHTML,
             title: title,
-            category: cat
+            category: cat,
+            modifiedAt: firebase.database.ServerValue.TIMESTAMP
         }).then(function () {
             // TODO: add some sort of notification
         });
@@ -532,6 +529,10 @@ saveCardButton.addEventListener("click", saveCard);
 
 document.getElementById("card-controls-new").addEventListener("click", initCard);
 document.getElementById("cards-new").addEventListener("click", initCard);
+$('#cards-new').on('click', function () {
+    $('#cards-list .active').toggleClass('active');
+    initCard();
+});
 
 document.getElementById("category-controls-new").addEventListener("click", initCategory);
 document.getElementById("categories-new").addEventListener("click", initCategory);

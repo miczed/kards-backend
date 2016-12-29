@@ -6,7 +6,8 @@ html, body {
   padding: 0;
   height: 100%;
   color: #2D2D2D;
-  font-family: 'Source Sans Pro', sans-serif; }
+  font-family: 'Source Sans Pro', sans-serif;
+  background: #FAFAFA; }
 
 body {
   -webkit-font-smoothing: antialiased;
@@ -62,8 +63,8 @@ h3 {
 
 /* Sidebar on the left side of the screen */
 #sidebar {
-  padding: 30px 30px 30px;
-  width: 300px;
+  padding: 20px;
+  width: 230px;
   position: fixed;
   height: 100%;
   overflow-y: scroll;
@@ -82,9 +83,14 @@ h3 {
       cursor: pointer;
       line-height: 27px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      position: relative; }
+      width: 100%;
+      position: relative;
+      overflow: hidden; }
+      #sidebar ul li .title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 30px;
+        white-space: nowrap; }
       #sidebar ul li span.pill {
         position: absolute;
         right: 0px;
@@ -97,19 +103,65 @@ h3 {
         font-weight: 700;
         font-size: 12px;
         top: 3px;
-        color: #969696; }
+        color: #969696;
+        display: block; }
       #sidebar ul li ul {
-        padding-left: 20px;
-        list-style-type: circle; }
-    #sidebar ul li:hover {
-      color: black;
-      position: relative; }
-      #sidebar ul li:hover button {
-        display: inline-block; }
+        padding-left: 15px;
+        list-style-type: none; }
     #sidebar ul li.active {
       font-weight: 600; }
     #sidebar ul li button {
+      display: none;
+      position: absolute;
+      right: 0px;
+      top: 7px; }
+  #sidebar .category-wrapper:hover {
+    color: black;
+    position: relative; }
+    #sidebar .category-wrapper:hover button {
+      display: inline-block; }
+    #sidebar .category-wrapper:hover span.pill {
       display: none; }
+
+#secondbar {
+  width: 230px;
+  position: fixed;
+  height: 100%;
+  overflow-y: scroll;
+  left: 230px;
+  background: white;
+  border-right: 1px solid #E0E0E0; }
+  #secondbar .fixed-button {
+    width: 230px;
+    background: white;
+    position: fixed;
+    bottom: 0px;
+    border: 0px;
+    border-top: 1px solid #E0E0E0;
+    border-right: 1px solid #e0e0e0;
+    box-shadow: none; }
+    #secondbar .fixed-button i {
+      margin-right: 5px;
+      line-height: 10px; }
+
+#cards-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 0px;
+  padding-bottom: 30px; }
+  #cards-list li {
+    border-bottom: 1px solid #E0E0E0;
+    padding: 10px 20px;
+    width: 100%;
+    cursor: pointer;
+    line-height: 27px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative; }
+  #cards-list li.active {
+    font-weight: 600;
+    background: #F2F2F2; }
 
 button {
   text-transform: uppercase;
@@ -152,9 +204,9 @@ button.red:hover {
 /* Main Container on the right side */
 #main {
   position: relative;
-  left: 330px;
-  width: calc(100vw - 330px);
-  max-width: 730px; }
+  width: calc(100vw - 460px);
+  max-width: 730px;
+  left: 460px; }
 
 #card, #category {
   top: 0;
@@ -192,6 +244,9 @@ button.red:hover {
   height: 300px;
   display: block;
   margin-bottom: 0px; }
+
+.ql-toolbar, .ql-container {
+  background: white; }
 
 #back .ql-container .ql-editor, #front .ql-container .ql-editor {
   font-family: 'Source Sans Pro', sans-serif;
