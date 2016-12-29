@@ -546,6 +546,12 @@ $('#cards-new').on('click',() =>{
     initCard();
 });
 
+$('#menu-toggle').on('click',() => {
+    $('#sidebar').toggleClass('show');
+    $('#secondbar').toggleClass('show');
+    $('#menu-toggle').toggleClass('show');
+});
+
 document.getElementById("category-controls-new").addEventListener("click", initCategory);
 document.getElementById("categories-new").addEventListener("click", initCategory);
 
