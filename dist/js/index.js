@@ -106,7 +106,8 @@ function buildTree(data) {
     var tree = [];
     data.forEach(function (node) {
         // find parent
-        var parent = dataMap[node.parent];
+
+        var parent = node.parent ? dataMap[node.parent] : null;
         if (parent) {
             // create child array if it doesn't exist
             (parent.children || (parent.children = [])).
@@ -219,8 +220,8 @@ function buildUlTree(obj, elem) {
 
         ul.appendChild(node);
 
-        // Category is currently selected
-        if (categoryRef && obj[i]._key == categoryRef.key) {
+        // Category is currently selected and isn't a parent category
+        if (categoryRef && obj[i]._key == categoryRef.key && obj[i].children && obj[i].children.length > 0) {
             $(div).addClass('active');
             $(ul).toggle();
         }
@@ -343,7 +344,7 @@ function loadCategory(key) {
     var category = categoriesStore[key];
     categoryRef = firebase.database().ref('categories/' + key);
     document.getElementById("category-title").value = category.title;
-    document.getElementById("category-parent").value = category.parent;
+    document.getElementById("category-parent").value = category.parent ? category.parent : "";
 }
 /**
  * Shows the card container and hides the categories container
