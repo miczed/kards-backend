@@ -382,7 +382,7 @@ function saveCard() {
                 firebase.database().ref('categories/' + oldCategory + "/cards/" + cardRef.key).remove();
             }
         }
-        cardRef.set({
+        var newCard = {
             front_delta: front.getContents(),
             front_html: document.querySelector("#front-editor .ql-editor").innerHTML,
             back_delta: back.getContents(),
@@ -390,9 +390,12 @@ function saveCard() {
             title: title,
             category: cat,
             modifiedAt: firebase.database.ServerValue.TIMESTAMP
-        }).then(function () {
+        };
+        cardRef.set(newCard).then(function () {
             // TODO: add some sort of notification
         });
+
+        cardsStore[cardRef.key] = newCard;
 
         // Set cards obj in categories
         var cardKey = cardRef.key;
