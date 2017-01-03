@@ -91,7 +91,8 @@ h3 {
         padding-right: 30px;
         white-space: nowrap; }
       #sidebar ul li .title.active {
-        font-weight: 600; }
+        font-weight: 600;
+        color: #14457C; }
       #sidebar ul li span.pill {
         position: absolute;
         right: 0px;
@@ -178,7 +179,8 @@ h3 {
     position: relative; }
   #cards-list li.active {
     font-weight: 600;
-    background: #F2F2F2; }
+    color: #14457C;
+    background: rgba(20, 69, 124, 0.05); }
   #cards-list li.empty-state {
     cursor: default;
     opacity: 0.5; }
@@ -249,7 +251,14 @@ button.red:hover {
       margin-right: 30px;
       margin-top: 15px;
       min-width: 300px;
-      font-family: 'Source Sans Pro', sans-serif; }
+      font-family: 'Source Sans Pro', sans-serif;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: white; }
+    #card .form-control input:focus, #card .form-control select:focus, #category .form-control input:focus, #category .form-control select:focus {
+      outline: none;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+      border-radius: 3px; }
     #card .form-control select, #category .form-control select {
       margin-right: 0px; }
   #card section, #category section {
@@ -257,6 +266,17 @@ button.red:hover {
     width: 100%; }
   #card #card-controls, #card #category-controls, #category #card-controls, #category #category-controls {
     margin-top: 20px; }
+  #card .ql-toolbar.ql-snow, #category .ql-toolbar.ql-snow {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: none; }
+  #card .ql-container.ql-snow, #category .ql-container.ql-snow {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px; }
+  #card .ql-container.ql-snow:focus, #category .ql-container.ql-snow:focus {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15); }
 
 #back-editor, #front-editor {
   height: 300px;

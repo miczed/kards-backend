@@ -2,7 +2,8 @@ $main-color: #2D2D2D;
 $sub-color: #969696;
 $warning-color: #E98686;
 $error-color: #BE4040;
-
+$highlight-color: #14457C;
+$focus-color: rgba($highlight-color,0.05);
 
 * {
   box-sizing: border-box;
@@ -112,6 +113,7 @@ h3 {
       }
       .title.active {
         font-weight: 600;
+        color: $highlight-color;
       }
       span.pill {
         position: absolute;
@@ -214,7 +216,8 @@ h3 {
   }
   li.active {
     font-weight: 600;
-    background: #F2F2F2;
+    color: $highlight-color;
+    background: $focus-color;
   }
   li.empty-state {
     cursor: default;
@@ -296,6 +299,15 @@ button.red:hover {
       margin-top: 15px;
       min-width: 300px;
       font-family: 'Source Sans Pro', sans-serif;
+      border-radius: 3px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: white;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
+      border-radius: 3px;
     }
     select {
       margin-right: 0px;
@@ -307,6 +319,20 @@ button.red:hover {
   }
   #card-controls, #category-controls {
     margin-top: 20px;
+  }
+  .ql-toolbar.ql-snow {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-bottom: none;
+  }
+  .ql-container.ql-snow {
+    border: 1px solid rgba(0,0,0,0.1);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+  .ql-container.ql-snow:focus {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
   }
 }
 
