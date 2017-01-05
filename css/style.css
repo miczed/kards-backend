@@ -301,6 +301,12 @@ button.red:hover {
     list-style-type: disc; }
   #back .ql-container .ql-editor ul > li::before, #front .ql-container .ql-editor ul > li::before {
     content: ''; }
+  #back .ql-container .ql-editor li.ql-indent-1, #front .ql-container .ql-editor li.ql-indent-1 {
+    margin-left: 1.5em;
+    list-style-type: circle; }
+  #back .ql-container .ql-editor li.ql-indent-2, #front .ql-container .ql-editor li.ql-indent-2 {
+    margin-left: 3em;
+    list-style-type: square; }
 
 /* responsive styles */
 /* Smartphones (portrait) ----------- */

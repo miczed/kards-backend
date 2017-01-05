@@ -363,6 +363,14 @@ button.red:hover {
   ul > li::before {
     content: '';
   }
+  li.ql-indent-1{
+    margin-left: 1.5em;
+    list-style-type: circle;
+  }
+  li.ql-indent-2{
+    margin-left: 3em;
+    list-style-type: square;
+  }
 }
 
 /* responsive styles */

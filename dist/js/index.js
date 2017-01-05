@@ -25,12 +25,18 @@ var back = new Quill('#back-editor', {
     theme: 'snow'
 });
 
-var cardsProvider = new Cards(firebase);
-var categoriesProvider = new Categories(firebase);
-
-categoriesProvider.getCategoryProgressGroups('-KYYx9Sgp9KGbzhLENdk', function (joint) {
-    // //-KXuyoLUPxH-XGIDZkIY
-    console.log(joint);
+// Replace -> with Arrow char [not sure if this is the right way]
+back.on('text-change', function (delta) {
+    if (back.getText(delta.ops[0].retain - 1, 2) === "->") {
+        back.insertText(delta.ops[0].retain - 1, "→", "api");
+        back.deleteText(delta.ops[0].retain, 2, 'api');
+    }
+});
+front.on('text-change', function (delta) {
+    if (front.getText(delta.ops[0].retain - 1, 2) === "->") {
+        front.insertText(delta.ops[0].retain - 1, "→", "api");
+        front.deleteText(delta.ops[0].retain, 2, 'api');
+    }
 });
 
 // Global cards store
