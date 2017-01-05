@@ -193,7 +193,9 @@ button {
   padding: 10px 20px;
   font-size: 10pt;
   font-family: 'Source Sans Pro', sans-serif;
-  cursor: pointer; }
+  cursor: pointer;
+  position: relative;
+  overflow: hidden; }
 
 button.transparent {
   background: transparent;
@@ -213,6 +215,24 @@ button.button_main {
   margin-right: 15px;
   font-weight: 600;
   transition: all 200ms ease-out; }
+
+button span.worker {
+  display: none; }
+  button span.worker img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); }
+
+button.working span.worker {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  border-radius: 50px; }
 
 button.button_main:hover, button.button_main:focus {
   box-shadow: 0 4px 10px rgba(45, 45, 45, 0.1);

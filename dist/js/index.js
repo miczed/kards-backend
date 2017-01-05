@@ -25,20 +25,6 @@ var back = new Quill('#back-editor', {
     theme: 'snow'
 });
 
-// Replace -> with Arrow char [not sure if this is the right way]
-back.on('text-change', function (delta) {
-    if (back.getText(delta.ops[0].retain - 1, 2) === "->") {
-        back.insertText(delta.ops[0].retain - 1, "→", "api");
-        back.deleteText(delta.ops[0].retain, 2, 'api');
-    }
-});
-front.on('text-change', function (delta) {
-    if (front.getText(delta.ops[0].retain - 1, 2) === "->") {
-        front.insertText(delta.ops[0].retain - 1, "→", "api");
-        front.deleteText(delta.ops[0].retain, 2, 'api');
-    }
-});
-
 // Global cards store
 var cardsStore = []; // Stores all cards locally in the browser (later via localstorage)
 var categoriesStore = []; // Stores all categories locally in the browser (later via localstorage)
@@ -46,6 +32,7 @@ var cardRef = void 0; // The currently selected card
 var cardsRef = firebase.database().ref('cards'); // The reference to ALL the cards
 var categoryRef = void 0; // The currently selected category
 var categoriesRef = firebase.database().ref('categories'); // Reference to ALL the categories
+
 
 /**
  * Called initially and whenever firebase detects a change on a cards object
@@ -377,6 +364,9 @@ function saveCard() {
     var title = document.getElementById("card-title").value;
     var cat = document.getElementById("card-category").value;
     if (title && cat) {
+
+        $("#card-controls-save").addClass('working');
+
         if (cardRef == null) {
             // Neue Karte wird erstellt
             cardRef = firebase.database().ref('cards').push();
@@ -400,6 +390,7 @@ function saveCard() {
         };
         cardRef.set(newCard).then(function () {
             // TODO: add some sort of notification
+            $("#card-controls-save").removeClass('working');
         });
 
         cardsStore[cardRef.key] = newCard;
@@ -422,12 +413,13 @@ function saveCard() {
  * @post: cardRef points to null
  */
 function initCard(event) {
+    $('#cards-list .active').toggleClass('active');
     showCardContainer();
+
     cardRef = null;
 
     if (categoryRef) {
         document.getElementById("card-category").value = categoryRef.key;
-        console.log(categoryRef.key);
     } else {
         document.getElementById("card-category").value = "";
     }
@@ -537,13 +529,11 @@ function saveCategory() {
 }
 
 /* Listener attachments */
-var saveCardButton = document.getElementById("card-controls-save");
-saveCardButton.addEventListener("click", saveCard);
+$("#card-controls-save").on("click", saveCard);
 
 document.getElementById("card-controls-new").addEventListener("click", initCard);
 document.getElementById("cards-new").addEventListener("click", initCard);
 $('#cards-new').on('click', function () {
-    $('#cards-list .active').toggleClass('active');
     initCard();
 });
 
@@ -551,6 +541,20 @@ $('#menu-toggle').on('click', function () {
     $('#sidebar').toggleClass('show');
     $('#secondbar').toggleClass('show');
     $('#menu-toggle').toggleClass('show');
+});
+
+// Replace -> with Arrow char [not sure if this is the right way]
+back.on('text-change', function (delta) {
+    if (back.getText(delta.ops[0].retain - 1, 2) === "->") {
+        back.insertText(delta.ops[0].retain - 1, "→", "api");
+        back.deleteText(delta.ops[0].retain, 2, 'api');
+    }
+});
+front.on('text-change', function (delta) {
+    if (front.getText(delta.ops[0].retain - 1, 2) === "->") {
+        front.insertText(delta.ops[0].retain - 1, "→", "api");
+        front.deleteText(delta.ops[0].retain, 2, 'api');
+    }
 });
 
 document.getElementById("category-controls-new").addEventListener("click", initCategory);
