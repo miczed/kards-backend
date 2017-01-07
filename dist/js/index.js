@@ -144,7 +144,10 @@ function buildSelectTree(obj, elem, indent) {
  * @param obj : object that should be rendered (should be a tree with children attribute)
  * @param elem : Element in which the object should be rendered
  */
-function buildUlTree(obj, elem) {
+function buildUlTree(obj, elem, level) {
+    if (!level) {
+        level = 0;
+    }
     if (!obj || obj.length == 0) {
         return;
     }
@@ -206,7 +209,7 @@ function buildUlTree(obj, elem) {
         node.appendChild(wrapper);
 
         if (obj[i].children && obj[i].children.length > 0) {
-            buildUlTree(obj[i].children, node);
+            buildUlTree(obj[i].children, node, level + 1);
             $(node).find('ul').toggle();
         }
         $(wrapper).addClass('category-wrapper');
@@ -214,9 +217,15 @@ function buildUlTree(obj, elem) {
         ul.appendChild(node);
 
         // Category is currently selected and isn't a parent category
-        if (categoryRef && obj[i]._key == categoryRef.key && obj[i].children && obj[i].children.length > 0) {
+
+
+        if (categoryRef && obj[i]._key == categoryRef.key) {
+            // Category is selected
             $(div).addClass('active');
-            $(ul).toggle();
+            if (level != 0) {
+                // Category is not on the top most level
+                $(ul).toggle(); // uncollapse list
+            }
         }
     }
     elem.appendChild(ul);
