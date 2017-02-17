@@ -32,7 +32,7 @@ var config = {
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 3000,
-      server: { baseDir: [''] }
+      server: { baseDir: ['dist'] }
     })
   ]
 
