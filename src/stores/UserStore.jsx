@@ -7,12 +7,7 @@ import firebaseApp from '../helpers/firebase.jsx';
 
 class UserStore {
 
-    @observable user = {
-      firebaseUser: null,
-      ID: null,
-      surname: null,
-      lastname: null,
-    };
+    @observable user = undefined;
 
     constructor(){
       this.startAuthStateListener();
@@ -21,11 +16,11 @@ class UserStore {
     startAuthStateListener() {
       firebaseApp.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.user.firebaseUser = user;
+                this.user = user;
             } else {
-                this.user.firebaseUser = null;
+                this.user= null;
             }
-        }).bind(this);
+        });
     }
 
     login(email, password) {
@@ -44,9 +39,9 @@ class UserStore {
     }
 
     logout() {
-        firebaseApp.auth().signOut().then(function() {
-          // do nothing --> startAuthStateListener already listens to changes
-        }.bind(this), function(error) {
+        firebaseApp.auth().signOut().then(() => {
+          this.user = null;
+        }, function(error) {
             console.log(error);
         });
     }

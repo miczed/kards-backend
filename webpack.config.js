@@ -1,6 +1,7 @@
 var Webpack = require('webpack');
 var Path = require('path');
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+var historyApiFallback = require('connect-history-api-fallback');
 
 var BUILD_DIR = Path.resolve(__dirname, 'dist');
 var APP_DIR = Path.resolve(__dirname, 'src');
@@ -32,7 +33,7 @@ var config = {
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 3000,
-      server: { baseDir: ['dist'] }
+      server: { baseDir: ['dist'], middleware: [ historyApiFallback() ] }
     })
   ]
 

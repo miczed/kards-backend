@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import firebaseApp from '../helpers/firebase.jsx';
 
 import {observer} from 'mobx-react';
 import UserStore from '../stores/UserStore.jsx';
