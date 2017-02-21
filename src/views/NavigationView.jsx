@@ -6,7 +6,7 @@ import UserStore from '../stores/UserStore.jsx';
 
 
 @observer
-class NavigationView extends Component {
+export default class NavigationView extends Component {
 
     handleLogout(){
       UserStore.logout();
@@ -29,4 +29,3 @@ class NavigationView extends Component {
 
 }
 
-module.exports = NavigationView;

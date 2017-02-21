@@ -39,7 +39,6 @@ class App extends Component {
 
 }
 
-
 function requireAuth(nextState, replace) {
     if (!UserStore.user) {
         replace({

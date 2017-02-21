@@ -6,7 +6,7 @@ import {observer} from 'mobx-react';
 import UserStore from '../stores/UserStore.jsx';
 
 @observer
-class ProfileView extends Component {
+export default class ProfileView extends Component {
 
     render() {
         return (
@@ -18,4 +18,3 @@ class ProfileView extends Component {
 
 }
 
-export default ProfileView;

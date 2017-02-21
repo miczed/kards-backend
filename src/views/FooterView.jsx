@@ -6,7 +6,7 @@ import {observer} from 'mobx-react';
 import UserStore from '../stores/UserStore.jsx';
 
 @observer
-class FooterView extends React.Component {
+export default class FooterView extends React.Component {
 
     render() {
         return (
@@ -18,4 +18,3 @@ class FooterView extends React.Component {
 
 }
 
-export default FooterView;

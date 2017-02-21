@@ -6,7 +6,7 @@ import {observer} from 'mobx-react';
 import UserStore from '../stores/UserStore.jsx';
 
 @observer
-class LoginView extends Component {
+export default class LoginView extends Component {
 
     handleLogin() {
       // TODO:
@@ -39,4 +39,3 @@ class LoginView extends Component {
 
 }
 
-export default LoginView;

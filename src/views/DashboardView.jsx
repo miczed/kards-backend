@@ -8,7 +8,7 @@ import NavigationView from './NavigationView.jsx';
 import FooterView from './FooterView.jsx';
 
 @observer
-class DashboardView extends Component {
+export default class DashboardView extends Component {
 
     render() {
         return (
@@ -22,5 +22,3 @@ class DashboardView extends Component {
     }
 
 }
-
-module.exports = DashboardView;
