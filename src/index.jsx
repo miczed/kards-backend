@@ -8,11 +8,13 @@ import DashboardView from './views/DashboardView.jsx';
 
 
 import {observer} from 'mobx-react';
-import {reaction} from 'mobx';
+import {reaction, useStrict } from 'mobx';
 import UserStore from './stores/UserStore.jsx';
 
 // Import scss file which will be automatically included in the bundle.js
 require("./scss/style.scss");
+
+useStrict(true);
 
 @observer
 class App extends Component {

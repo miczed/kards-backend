@@ -14,7 +14,7 @@ class UserStore {
     }
 
     @action startAuthStateListener() {
-      action(firebaseApp.auth().onAuthStateChanged((user) => {
+      firebaseApp.auth().onAuthStateChanged(action((user) => {
             if (user) {
                 this.user = user;
             } else {
@@ -55,9 +55,9 @@ class UserStore {
 
     }
     logout() {
-        firebaseApp.auth().signOut().then(() => {
+        firebaseApp.auth().signOut().then(action(() => {
             this.user = null;
-        }, function(error) {
+        }), function(error) {
             console.log(error);
         });
     }
