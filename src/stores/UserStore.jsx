@@ -43,16 +43,65 @@ class UserStore {
         });
     }
 
+    /**
+     * UNTESTED
+     * Creates a new user and automatically logs the user in,
+     * if the registration was sucessful ( onAuthStateChanged is called )
+     * @param email
+     * @param password
+     * @param username
+     *
+     */
     newUser(email,password,username) {
-
+        firebaseApp.auth().createUserWithEmailAndPassword(email,password).then(action((user) => {
+            this.user = user;
+            this.user.username = username;
+            this.updateUser({username : username});
+        }),(error) => {
+           switch(error) {
+               case 'auth/email-already-in-use':
+                   alert('This E-Mail is already in use');
+                   break;
+               case 'auth/invalid-email':
+                   alert('Please enter a valid E-Mail adress.');
+                   break;
+               case 'auth/operation-not-allowed':
+                   alert('Currently the user registration is not possible.');
+                   break;
+               case 'auth/weak-password':
+                   alert('Your password is too weak. Please try a different one.');
+                   break;
+           }
+        });
     }
 
-    updateUser(user) {
-
+    /**
+     * UNTESTED
+     * Updates the profile of a signed in user
+     * @param userChanges : Object which contains the fields that should be updated
+     */
+    updateUser(userChanges) {
+        let user = firebase.auth().currentUser;
+        if(user) {
+            user.updateProfile(userChanges).catch((error) => {
+                alert(error);
+            });
+        } else {
+            alert('You have to be logged in, to perform this action.');
+        }
     }
 
-    deleteUser(user_id) {
-
+    /**
+     * UNTESTED
+     * Deletes the currently logged in user
+     */
+    deleteUser() {
+        let user = firebase.auth().currentUser;
+        if(user) {
+            user.delete();
+        } else {
+            alert('You have to be logged in, to perform this action.');
+        }
     }
     logout() {
         firebaseApp.auth().signOut().then(action(() => {
@@ -60,9 +109,6 @@ class UserStore {
         }), function(error) {
             console.log(error);
         });
-    }
-    @computed get fullName(){
-      return this.surname + " " + this.lastname;
     }
 }
 
