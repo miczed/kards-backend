@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import firebaseApp from '../helpers/firebase.jsx';
 
 /**
@@ -13,14 +13,14 @@ class UserStore {
       this.startAuthStateListener();
     }
 
-    startAuthStateListener() {
-      firebaseApp.auth().onAuthStateChanged((user) => {
+    @action startAuthStateListener() {
+      action(firebaseApp.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.user = user;
             } else {
                 this.user= null;
             }
-        });
+        }));
     }
 
     login(email, password) {
@@ -42,14 +42,25 @@ class UserStore {
           console.log(error);
         });
     }
+
+    newUser(email,password,username) {
+
+    }
+
+    updateUser(user) {
+
+    }
+
+    deleteUser(user_id) {
+
+    }
     logout() {
         firebaseApp.auth().signOut().then(() => {
-          this.user = null;
+            this.user = null;
         }, function(error) {
             console.log(error);
         });
     }
-
     @computed get fullName(){
       return this.surname + " " + this.lastname;
     }
