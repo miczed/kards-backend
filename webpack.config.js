@@ -35,7 +35,9 @@ var config = {
       port: 3000,
       server: { baseDir: ['dist'], middleware: [ historyApiFallback() ] }
     })
-  ]
+  ],
+
+    devtool: "#cheap-eval-source-map"
 
 };
 
