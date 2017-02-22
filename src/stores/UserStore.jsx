@@ -22,7 +22,6 @@ class UserStore {
           // if(user.emailVerified) {
               if (user) {
                   this.user = user;
-                  this.getUserInfo(user.uid);
               } else {
                   this.user = null;
               }
@@ -34,31 +33,27 @@ class UserStore {
         }));
     }
 
+    /**
+     * Logs the user in and gets it's profile information from the DB
+     * @param email
+     * @param password
+     * @returns firebase.Promise
+     */
     login(email, password) {
-        firebaseApp.auth().signInWithEmailAndPassword(email, password).catch((error) => {
-          // TODO: Add language support for error messages
-          let errorCode = error.code;
-          let errorMessage = error.message;
-          if (errorCode === 'auth/wrong-password') {
-           alert('Wrong password.');
-          } else if (errorCode === 'auth/invalid-email') {
-              alert('E-Mail Adress invalid');
-          } else if (errorCode === 'auth/user-not-found') {
-              alert('There is no user registered with this email address.');
-          }
-          else {
-              alert(errorMessage);
-          }
-          console.log(error);
-        });
+        return firebaseApp.auth().signInWithEmailAndPassword(email, password).then(action((user) => {
+            this.user = user;
+            return this.getUserInfo(user.uid);
+        }));
     }
 
+    /**
+     * Logs the currently signed in user out
+     * @returns firebase.Promise
+     */
     logout() {
-        firebaseApp.auth().signOut().then(action(() => {
+        return firebaseApp.auth().signOut().then(action(() => {
             this.user = null;
-        }), function(error) {
-            console.log(error);
-        });
+        }));
     }
 
     /**
@@ -67,90 +62,57 @@ class UserStore {
      * @param uid
      */
     getUserInfo(uid) {
-        firebaseApp.database().ref("users/" + uid).on("value", action((snapshot) => {
-            this.username = snapshot.val().username;
-            this.firstname = snapshot.val().firstname;
-            this.lastname = snapshot.val().lastname;
+        firebaseApp.database().ref("users/" + uid).once("value", action((snapshot) => {
+            this.username = snapshot.val() ? snapshot.val().username : null;
+            this.lastname = snapshot.val() ? snapshot.val().lastname : null;
+            this.firstname = snapshot.val() ? snapshot.val().firstname : null;
         }));
     }
 
     /**
-     * UNTESTED
      * Creates a new user and automatically logs the user in,
      * if the registration was sucessful ( onAuthStateChanged is called )
      * @param email
      * @param password
      * @param username
+     * @param firstname
+     * @param lastname
+     * @returns Promise | firebase.Promise
      */
     createNewUser(email,password,username, firstname, lastname) {
-        firebaseApp.auth().createUserWithEmailAndPassword(email,password).then(action((user) => {
-
+        return firebaseApp.auth().createUserWithEmailAndPassword(email,password).then(action((user) => {
             // Set observable store values
             this.user = user;
-            this.username = username;
-            this.firstname = firstname;
-            this.lastname = lastname;
-
+        })).then(() => {
             // Save information about user in Firebase
             let userInfoChanges = {
                 username: username,
                 firstname: firstname,
                 lastname: lastname
             };
-            this.updateUserInfo(userInfoChanges);
 
-        }),(error) => {
-           switch(error) {
-               case 'auth/email-already-in-use':
-                   alert('This E-Mail is already in use');
-                   break;
-               case 'auth/invalid-email':
-                   alert('Please enter a valid E-Mail adress.');
-                   break;
-               case 'auth/operation-not-allowed':
-                   alert('Currently the user registration is not possible.');
-                   break;
-               case 'auth/weak-password':
-                   alert('Your password is too weak. Please try a different one.');
-                   break;
-           }
+            return this.updateUserInfo(userInfoChanges)
+        }).then(() => {
+            this.username = username;
+            this.firstname = firstname;
+            this.lastname = lastname;
         });
     }
 
     /**
-     * UNTESTED
-     * Updates the profile of a signed in user when a new account is created
+     * Updates the profile of a signed in user
      * @param userInfoChanges: Object which contains the fields that should be updated
-     * @param password: Password from «New Account Form» is taken to verify the user again
-     */
-    updateUserInfo(userInfoChanges, password) {
-
-        /*
-
-        TODO: Reauthenticate with Firebase (This is mandatory due to Firebase)
-        (--> take pw from form, no popup necessary)
-        TODO: Save new information about user in users/uid in Firebase
-
-        */
-
-    }
-
-    /**
-     * UNTESTED
-     * Updates the profile of a signed in user which is made on the profile settings page
-     * @param userInfoChanges: Object which contains the fields that should be updated
+     * @returns Promise || firebase.Promise
      */
     updateUserInfo(userInfoChanges) {
-
-        /*
-
-         TODO: Reauthenticate with Firebase (This is mandatory due to Firebase)
-         (--> take pw from form, no popup necessary)
-         TODO: Save new information about user in users/uid in Firebase
-
-         */
-
+        let user = firebaseApp.auth().currentUser;
+        if(user) {
+            return firebaseApp.database().ref('/users/' + user.uid).update(userInfoChanges);
+        } else {
+            return Promise.reject(new Error('You have to be logged in, to edit your account.'));
+        }
     }
+
 
     /**
      * UNTESTED
@@ -164,15 +126,19 @@ class UserStore {
     }
 
     /**
-     * UNTESTED
      * Deletes the currently logged in user
+     * @returns Promise || firebase.Promise
      */
     deleteUser() {
-        let user = firebase.auth().currentUser;
+        let user = firebaseApp.auth().currentUser;
         if(user) {
-            user.delete();
+            return firebaseApp.database().ref('/users/' + user.uid).remove().then(() => {
+                return user.delete();
+            }).then(() => {
+                this.user = null;
+            });
         } else {
-            alert('You have to be logged in, to perform this action.');
+            return Promise.reject(new Error('You have to be logged in, to delete your account.'));
         }
     }
 
