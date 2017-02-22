@@ -8,6 +8,9 @@ import firebaseApp from '../helpers/firebase.jsx';
 class UserStore {
 
     @observable user = undefined;
+    @observable username = undefined;
+    @observable lastname = undefined;
+    @observable firstname = undefined;
 
     constructor(){
       this.startAuthStateListener();
@@ -15,17 +18,24 @@ class UserStore {
 
     @action startAuthStateListener() {
       firebaseApp.auth().onAuthStateChanged(action((user) => {
-            if (user) {
-                this.user = user;
-            } else {
-                this.user= null;
-            }
+          // TODO: Discuss if email has to be verified or not --> maybe problems with user onboarding and loosing customers
+          // if(user.emailVerified) {
+              if (user) {
+                  this.user = user;
+                  this.getUserInfo(user.uid);
+              } else {
+                  this.user = null;
+              }
+          // }
+          /* else {
+              alert('Please confirm your email address first. Didn\'t got an email? Click on the «Send confirmation email» Button again.');
+              this.logout();
+          } */
         }));
     }
 
     login(email, password) {
         firebaseApp.auth().signInWithEmailAndPassword(email, password).catch((error) => {
-          // TODO: Add custom error messages for each case
           // TODO: Add language support for error messages
           let errorCode = error.code;
           let errorMessage = error.message;
@@ -34,13 +44,34 @@ class UserStore {
           } else if (errorCode === 'auth/invalid-email') {
               alert('E-Mail Adress invalid');
           } else if (errorCode === 'auth/user-not-found') {
-              alert('There is no user registred to this e-mail adress.');
-              // TODO: Redirect user to registration page automatically and fill in e-mail adress there
-          } else {
+              alert('There is no user registered with this email address.');
+          }
+          else {
               alert(errorMessage);
           }
           console.log(error);
         });
+    }
+
+    logout() {
+        firebaseApp.auth().signOut().then(action(() => {
+            this.user = null;
+        }), function(error) {
+            console.log(error);
+        });
+    }
+
+    /**
+     * UNTESTED
+     * Gets username, lastname and firstname for user ID in Firebase DB
+     * @param uid
+     */
+    getUserInfo(uid) {
+        firebaseApp.database().ref("users/" + uid).on("value", action((snapshot) => {
+            this.username = snapshot.val().username;
+            this.firstname = snapshot.val().firstname;
+            this.lastname = snapshot.val().lastname;
+        }));
     }
 
     /**
@@ -50,13 +81,24 @@ class UserStore {
      * @param email
      * @param password
      * @param username
-     *
      */
-    newUser(email,password,username) {
+    createNewUser(email,password,username, firstname, lastname) {
         firebaseApp.auth().createUserWithEmailAndPassword(email,password).then(action((user) => {
+
+            // Set observable store values
             this.user = user;
-            this.user.username = username;
-            this.updateUser({username : username});
+            this.username = username;
+            this.firstname = firstname;
+            this.lastname = lastname;
+
+            // Save information about user in Firebase
+            let userInfoChanges = {
+                username: username,
+                firstname: firstname,
+                lastname: lastname
+            };
+            this.updateUserInfo(userInfoChanges);
+
         }),(error) => {
            switch(error) {
                case 'auth/email-already-in-use':
@@ -77,18 +119,48 @@ class UserStore {
 
     /**
      * UNTESTED
-     * Updates the profile of a signed in user
-     * @param userChanges : Object which contains the fields that should be updated
+     * Updates the profile of a signed in user when a new account is created
+     * @param userInfoChanges: Object which contains the fields that should be updated
+     * @param password: Password from «New Account Form» is taken to verify the user again
      */
-    updateUser(userChanges) {
-        let user = firebase.auth().currentUser;
-        if(user) {
-            user.updateProfile(userChanges).catch((error) => {
-                alert(error);
-            });
-        } else {
-            alert('You have to be logged in, to perform this action.');
-        }
+    updateUserInfo(userInfoChanges, password) {
+
+        /*
+
+        TODO: Reauthenticate with Firebase (This is mandatory due to Firebase)
+        (--> take pw from form, no popup necessary)
+        TODO: Save new information about user in users/uid in Firebase
+
+        */
+
+    }
+
+    /**
+     * UNTESTED
+     * Updates the profile of a signed in user which is made on the profile settings page
+     * @param userInfoChanges: Object which contains the fields that should be updated
+     */
+    updateUserInfo(userInfoChanges) {
+
+        /*
+
+         TODO: Reauthenticate with Firebase (This is mandatory due to Firebase)
+         (--> take pw from form, no popup necessary)
+         TODO: Save new information about user in users/uid in Firebase
+
+         */
+
+    }
+
+    /**
+     * UNTESTED
+     * Updates the email address for a signed in user
+     * @param newEmail: New email address
+     */
+    updateUserEmail(newEmail) {
+
+        /* TODO: Update email address --> maybe verification necessary? */
+
     }
 
     /**
@@ -103,13 +175,7 @@ class UserStore {
             alert('You have to be logged in, to perform this action.');
         }
     }
-    logout() {
-        firebaseApp.auth().signOut().then(action(() => {
-            this.user = null;
-        }), function(error) {
-            console.log(error);
-        });
-    }
+
 }
 
 export default new UserStore();

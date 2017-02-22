@@ -12,6 +12,7 @@ export default class ProfileView extends Component {
         return (
           <div className="profile">
             <p>Profile Component</p>
+              <p>Username: {UserStore.username}</p>
           </div>
         );
     }
