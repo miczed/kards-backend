@@ -9,6 +9,7 @@
 3. Run `firebase deploy`
 
 ## Commands
-`npm run dev` run dev environment
-`npm run build` build files before deployment
+- `npm run dev` run dev environment
+- `npm run build` build files before deployment
+- `npm run test` runs all unit tests in the **/test** directory using mocha
 
