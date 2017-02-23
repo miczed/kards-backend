@@ -22,6 +22,7 @@ class UserStore {
           // if(user.emailVerified) {
               if (user) {
                   this.user = user;
+                  this.getUserInfo(user.uid);
               } else {
                   this.user = null;
               }
@@ -85,29 +86,26 @@ class UserStore {
             this.user = user;
         })).then(() => {
             // Save information about user in Firebase
-            let userInfoChanges = {
-                username: username,
-                firstname: firstname,
-                lastname: lastname
-            };
-
-            return this.updateUserInfo(userInfoChanges)
-        }).then(() => {
-            this.username = username;
-            this.firstname = firstname;
-            this.lastname = lastname;
+            return this.updateUserInfo(username, firstname,lastname)
         });
     }
 
     /**
      * Updates the profile of a signed in user
-     * @param userInfoChanges: Object which contains the fields that should be updated
+     * @param username
+     * @param firstname
+     * @param lastname
      * @returns Promise || firebase.Promise
      */
-    updateUserInfo(userInfoChanges) {
+    updateUserInfo(username, firstname, lastname) {
         let user = firebaseApp.auth().currentUser;
         if(user) {
-            return firebaseApp.database().ref('/users/' + user.uid).update(userInfoChanges);
+            const userInfoChanges = { username: username, firstname: firstname, lastname: lastname};
+            return firebaseApp.database().ref('/users/' + user.uid).update(userInfoChanges).then(action(() => {
+                this.username = username;
+                this.firstname = firstname;
+                this.lastname = lastname;
+            }));
         } else {
             return Promise.reject(new Error('You have to be logged in, to edit your account.'));
         }

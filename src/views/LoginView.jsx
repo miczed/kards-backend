@@ -10,8 +10,8 @@ export default class LoginView extends Component {
 
     handleLogin() {
       // TODO:
-      var email = document.getElementById("login_input_email").value;
-      var password = document.getElementById("login_input_password").value;
+      const email = document.getElementById("login_input_email").value;
+      const password = document.getElementById("login_input_password").value;
       UserStore.login(email, password);
     }
 
