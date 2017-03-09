@@ -1,18 +1,11 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 
-import {
-    BrowserRouter as Router,
-    Route,
-    Link,
-    Redirect,
-    Switch
-} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom'
 
 import LoginView from './views/LoginView.jsx';
 import DashboardView from './views/DashboardView.jsx';
 import LearnView from './views/LearnView.jsx';
-
 
 import {observer} from 'mobx-react';
 import {reaction, useStrict } from 'mobx';
@@ -24,6 +17,10 @@ require("./scss/style.scss");
 // sets mobx to strict mode
 useStrict(true);
 
+
+/**
+ * Private Route that redirects to the login page, if user is not authed
+ */
 function PrivateRoute ({component: Component, authed, ...rest}) {
     return (
         <Route
@@ -34,6 +31,10 @@ function PrivateRoute ({component: Component, authed, ...rest}) {
         />
     )
 }
+
+/**
+ * Public Route that redirects to the dashboard, if user is authed
+ */
 
 function PublicRoute ({component: Component, authed, ...rest}) {
     return (
@@ -46,10 +47,12 @@ function PublicRoute ({component: Component, authed, ...rest}) {
     )
 }
 
-
+/**
+ * Main Component of the app
+ * Handles routing and redirect / authentication
+ */
 @observer
 export default class App extends Component {
-
     constructor() {
       super();
       // when the user of the app changes, call the startApp function
@@ -73,6 +76,7 @@ export default class App extends Component {
           })
       }
   }
+
   render () {
       return this.state.loading === true ? <h1>Loading</h1> : (
           <Router>

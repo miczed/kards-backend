@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 
-import {observer} from 'mobx-react';
+const SWIPE_THRESHOLD = 120;
 
-@observer
+
 export default class CardStack extends React.Component {
-
+    constructor(props) {
+        super(props);
+        //Use a persistent variable to track currentIndex instead of a local one.
+    }
     render() {
         return (
             <div className="footer">
