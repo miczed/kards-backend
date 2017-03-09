@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    Switch
+} from 'react-router-dom'
 
 import LoginView from './views/LoginView.jsx';
 import DashboardView from './views/DashboardView.jsx';
+import LearnView from './views/LearnView.jsx';
 
 
 import {observer} from 'mobx-react';
@@ -14,48 +21,71 @@ import UserStore from './stores/UserStore.jsx';
 // Import scss file which will be automatically included in the bundle.js
 require("./scss/style.scss");
 
+// sets mobx to strict mode
 useStrict(true);
 
+function PrivateRoute ({component: Component, authed, ...rest}) {
+    return (
+        <Route
+            {...rest}
+            render={(props) => authed === true
+                ? <Component {...props} />
+                : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+        />
+    )
+}
+
+function PublicRoute ({component: Component, authed, ...rest}) {
+    return (
+        <Route
+            {...rest}
+            render={(props) => authed === false
+                ? <Component {...props} />
+                : <Redirect to='/dashboard' />}
+        />
+    )
+}
+
+
 @observer
-class App extends Component {
-  constructor() {
+export default class App extends Component {
+
+    constructor() {
       super();
       // when the user of the app changes, call the startApp function
       reaction(() => UserStore.user, () => this.startApp(UserStore.user));
-  }
+      this.state = {
+          authed: false,
+          loading: true,
+      };
+    }
+
   startApp(user) {
-      // if user isn't set then load login form
-      if(!user) {
-          this.props.router.push('/login')
+      if (user) {
+          this.setState({
+              authed: true,
+              loading: false,
+          })
       } else {
-          this.props.router.push('/dashboard')
+          this.setState({
+              loading: false,
+              authed: false,
+          })
       }
   }
   render () {
-      return (
-          <div>
-              {this.props.children}
-          </div>
+      return this.state.loading === true ? <h1>Loading</h1> : (
+          <Router>
+              <Switch>
+                  <PrivateRoute path='/' exact component={DashboardView} />
+                  <PublicRoute authed={this.state.authed} path='/login' component={LoginView} />
+                  <PrivateRoute authed={this.state.authed} path='/dashboard' component={DashboardView} />
+                  <PrivateRoute authed={this.state.authed} path='/learn' component={LearnView} />
+                  <Route render={() => <h3>No Match</h3>} />
+              </Switch>
+          </Router>
       )
   }
 
 }
-
-function requireAuth(nextState, replace) {
-    if (!UserStore.user) {
-        replace({
-            pathname: '/login',
-            state: { nextPathname: nextState.location.pathname }
-        })
-    }
-}
-
-render((
-    <Router history={browserHistory}>
-        <Route path="/" component={App} >
-            <IndexRoute component={DashboardView} onEnter={requireAuth} />
-            <Route path="/login" component={LoginView} />
-            <Route path="/dashboard" component={DashboardView} onEnter={requireAuth}/>
-        </Route>
-    </Router>
-), document.getElementById('app'));
+render((<App />), document.getElementById('app'));

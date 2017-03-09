@@ -15,12 +15,12 @@ export default class NavigationView extends Component {
     render() {
         return (
           <div className="nav_wrapper">
-            <div className="nav">
+            <div className="nav container">
               <p className="nav_logo">Kards</p>
               {/* <input placeholder="Hier kommt die Suchbar..." /> */}
               <div className="nav_user">
                 <p className="userPic">[Pic]</p>
-                <a className="signout" href="#" onClick={this.handleLogout}>Abmelden</a>
+                <a className="signout btn btn-regular" href="#" onClick={this.handleLogout}>Abmelden</a>
               </div>
             </div>
           </div>

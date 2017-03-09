@@ -12,13 +12,15 @@ $gutter: 20px;
 $cols: 12;
 
 // Colors
+$almost-black: #333333;
 $primary-color: #00BC80;
 $primary-color-darker: #009767;
+$solid-grey: #969696;
 
 /* LAYOUT */
 
 body {
-  background-color: #FFFFFF;
+  background-color: #FAFAFA;
   width: 100%;
   height: 100%;
 }
@@ -53,6 +55,7 @@ body {
 	padding: 10px 20px;
 	cursor: pointer;
 	transition: all linear 0.2s;
+	text-decoration: none;
 }
 .btn-primary {
 	background: $primary-color;
@@ -60,8 +63,17 @@ body {
 }
 .btn-primary:hover {
 	background: $primary-color-darker;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
-
+.btn-regular {
+	background: white;
+	color: $solid-grey;
+	border: 1px solid #E5E5E5;
+}
+.btn-regular:hover {
+	color: $almost-black;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
 /* General Typography */
 h1 {
 	font-family: "Source Sans Pro";
@@ -77,14 +89,12 @@ h2 {
 	font-weight: 600;
 	font-size: 18px;
 	line-height: 100%;
-	color: #969696;
+	color: $solid-grey;
 	opacity: 1.00;
 	margin-top: 10px;
 }
 
 /* LOGIN */
-
-
 .login {
   	width: 320px;
   	margin: 160px auto;
@@ -98,6 +108,7 @@ h2 {
 		font-size: 1em;
 		margin:0;
 		box-sizing: border-box;
+		color: $almost-black;
 	}
 
 	hr {
@@ -110,23 +121,19 @@ h2 {
 	}
 }
 
-
-
-
-
 /* NAVIGATION */
-
 .nav_wrapper {
 	width: 100%;
 	overflow: hidden;
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.03);
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
+	border-radius: 3px;
 }
 
 .nav {
-	width: 80%;
-	margin: 0 auto;
-	max-width: 1200px;
-	overflow: hidden;
-	padding: 1em 0;
+	padding: 10px 0;
+	height: 60px;
 
 	.nav_logo {
 		float: left;
