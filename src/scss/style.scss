@@ -1,3 +1,4 @@
+@import 'reset';
 
 /** CSS FILE FOR KARDS WEBAPP
 
@@ -6,57 +7,13 @@
 
 */
 
-/* CSS RESET */
+$container-width: 1000px;
+$gutter: 20px;
+$cols: 12;
 
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
+// Colors
+$primary-color: #00BC80;
+$primary-color-darker: #009767;
 
 /* LAYOUT */
 
@@ -66,51 +23,95 @@ body {
   height: 100%;
 }
 
+/* Grid Styles */
+.container {
+	width: $container-width;
+	position: relative;
+	margin: 0 auto;
+}
+
+/* Component Styles */
+.card {
+	/* Rectangle */
+	background: #FFFFFF;
+	opacity: 1.00;
+	border: 1px solid #E9E9E9;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+	border-radius: 3px;
+	padding: 20px;
+	margin: 20px 0;
+}
+.btn {
+	border-radius: 3px;
+	font-family: "Source Sans Pro";
+	font-style: normal;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 100%;
+	opacity: 1.00;
+	border: 0;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: all linear 0.2s;
+}
+.btn-primary {
+	background: $primary-color;
+	color: white;
+}
+.btn-primary:hover {
+	background: $primary-color-darker;
+}
+
+/* General Typography */
+h1 {
+	font-family: "Source Sans Pro";
+	font-style: normal;
+	font-weight: bold;
+	font-size: 36px;
+	line-height: 100%;
+	color: $primary-color;
+}
+h2 {
+	font-family: "Source Sans Pro";
+	font-style: normal;
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 100%;
+	color: #969696;
+	opacity: 1.00;
+	margin-top: 10px;
+}
 
 /* LOGIN */
 
-.login_wrapper {
-  width: 100vw;
-  height: 100vh;
-  background-color: #f2f2f2;
-}
 
 .login {
-  width: 20%;
-  max-width: 300px;
-  margin: 0 auto;
-  padding: 3em 0;
+  	width: 320px;
+  	margin: 160px auto;
+	text-align: center;
+
+	input {
+		width: 100%;
+		-webkit-apperance: none;
+		border: 0px;
+		padding: 10 0px;
+		font-size: 1em;
+		margin:0;
+		box-sizing: border-box;
+	}
+
+	hr {
+		border: 0;
+		height: 1px;
+		background: #C4C4C4;
+	}
+	.card {
+		margin: 40px 0;
+	}
 }
 
-.login h1 {
-  font-size: 2.618em;
-  margin-bottom: 1em;
-}
 
-.login p {
-  font-size: 1em;
-  margin-bottom: 0.309em;
-}
 
-.login input {
-  width: 100%;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  -webkit-apperance: none;
-  border: 1px solid #c2c2c2;
-  padding: 0.6em 0.5em;
-  font-size: 1em;
-  margin-bottom: 1em;
-  box-sizing: border-box;
-}
-
-.login button {
-  width: 100%;
-  font-size: 1em;
-  padding: 0.6em 0.5em;
-  margin-bottom: 1em;
-  box-sizing: border-box;
-}
 
 
 /* NAVIGATION */
