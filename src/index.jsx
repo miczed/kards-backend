@@ -33,7 +33,7 @@ function PrivateRoute ({component: Component, authed, ...rest}) {
 }
 
 /**
- * Public Route that redirects to the dashboard, if user is authed
+ * Public Route that redirects to the site the user initially wanted to look at or to the dashboard
  */
 
 function PublicRoute ({component: Component, authed, ...rest}) {
@@ -42,7 +42,7 @@ function PublicRoute ({component: Component, authed, ...rest}) {
             {...rest}
             render={(props) => authed === false
                 ? <Component {...props} />
-                : <Redirect to='/dashboard' />}
+                : (props.location.state.from) ? <Redirect to={props.location.state.from.pathname} />  : <Redirect to='/dashboard' />}
         />
     )
 }

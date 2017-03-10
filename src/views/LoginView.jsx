@@ -7,14 +7,20 @@ import UserStore from '../stores/UserStore.jsx';
 
 @observer
 export default class LoginView extends Component {
+    constructor() {
+        super();
 
-    handleLogin() {
+    }
+    handleLogin = () => {
       // TODO:
       const email = document.getElementById("login_input_email").value;
       const password = document.getElementById("login_input_password").value;
       UserStore.login(email, password);
-    }
 
+    };
+    componentWillMount() {
+        console.log(this.props.location.state.from);
+    }
     render() {
         return (
                 <div className="container">
