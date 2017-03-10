@@ -14,11 +14,17 @@ export default class AnimTest extends Component {
         this.state.anim.setValue({x: x, y: y});
     }
     render() {
-        //let transformX = this.state.anim.x;
-        //let transformY = this.state.anim.y;
-        let scale = this.state.anim.x.interpolate({ inputRange: [0, 100], outputRange: [0.3, 1], extrapolate: 'clamp' });
+
         const styles = {
-            transform: [{scale}]
+            transform: Animated.template `
+              translateX(${this.state.anim.x}px)
+              translateY(${this.state.anim.y}px)
+              scale(${this.state.anim.x.interpolate({
+                        inputRange: [0, 100],
+                        outputRange: [0.3, 1],
+                        extrapolate: 'clamp'
+                    })})
+            `
         };
 
         return(

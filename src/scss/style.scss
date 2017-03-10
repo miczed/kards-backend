@@ -161,6 +161,7 @@ h2 {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%,-50%);
+	height: 360px;
 	.card {
 		cursor: pointer;
 		font-family: "Source Sans Pro";
@@ -170,17 +171,19 @@ h2 {
 		line-height: 125%;
 		color: rgba(0, 0, 0, 0.8);
 		opacity: 1.00;
-
+		height: 320px;
+		z-index: 20;
 	}
 	.yup, .nope {
 		position: absolute;
 		padding: 10px 0px;
 		width: 200px;
 		text-align: center;
-		bottom: 0px;
+		top: 300px;
 		border-radius: 40px;
 		left: 50%;
 		margin-left: -100px;
+		z-index: 1;
 		p {
 			font-family: "Source Sans Pro";
 			font-style: normal;
