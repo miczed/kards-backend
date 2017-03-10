@@ -141,15 +141,26 @@ h2 {
 
 	.nav_user {
 		float: right;
-
 		.userPic {
 			float: left;
 		}
-
 		.signout {
 			float: left;
 		}
 
 	}
 
+}
+
+/* CardStack */
+.cardStack {
+	width: 660px;
+	max-width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	.card {
+		cursor: pointer;
+	}
 }
