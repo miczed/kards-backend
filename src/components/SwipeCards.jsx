@@ -18,32 +18,6 @@ const styles = {
         alignItems: 'center',
         backgroundColor: 'transparent',
     },
-    yup: {
-        borderColor: 'green',
-        borderWidth: 2,
-        position: 'absolute',
-        padding: 20,
-        bottom: 20,
-        borderRadius: 5,
-        right: 20,
-    },
-    yupText: {
-        fontSize: 16,
-        color: 'green',
-    },
-    nope: {
-        borderColor: 'red',
-        borderWidth: 2,
-        position: 'absolute',
-        bottom: 20,
-        padding: 20,
-        borderRadius: 5,
-        left: 20,
-    },
-    nopeText: {
-        fontSize: 16,
-        color: 'red',
-    }
 };
 
 //Components could be unloaded and loaded and we will loose the users currentIndex, we can persist it here.
@@ -407,8 +381,8 @@ export default class SwipeCards extends Component {
         }
 
         if (this.props.showNope) {
-            return <Animated.div style={animStyles}>
-                <p style={styles.nopeText}>{this.props.nopeText}</p>
+            return <Animated.div style={animStyles} className="nope">
+                <p>{this.props.nopeText}</p>
             </Animated.div>;
         }
 
@@ -421,16 +395,14 @@ export default class SwipeCards extends Component {
         let yupOpacity = pan.x.interpolate({ inputRange: [0, 150], outputRange: [0, 1] });
         let yupScale = pan.x.interpolate({ inputRange: [0, 150], outputRange: [0.5, 1], extrapolate: 'clamp' });
         let animatedYupStyles = { transform: [{ scale: yupScale }], opacity: yupOpacity };
-        let animStyles = Object.assign({},styles.yup, animatedYupStyles);
+
         if (this.props.renderYup) {
             return this.props.renderYup(pan);
         }
 
-
-
         if (this.props.showYup) { //[styles.yup, animatedYupStyles]
-            return <Animated.div className="yup" style={animStyles}>
-                <p style={styles.yupText}>{this.props.yupText}</p>
+            return <Animated.div className="yup" style={animatedYupStyles}>
+                <p>{this.props.yupText}</p>
             </Animated.div>;
         }
 

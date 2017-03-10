@@ -42,6 +42,8 @@ export default class LearnView extends Component {
                     handleNope={this.handleNope}
                     stack={true}
                     stackOffsetY={-10}
+                    yupText={"Gewusst"}
+                    nopeText={"Nicht Gewusst"}
                 />
             </div>
         );

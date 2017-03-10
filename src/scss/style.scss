@@ -16,6 +16,7 @@ $almost-black: #333333;
 $primary-color: #00BC80;
 $primary-color-darker: #009767;
 $solid-grey: #969696;
+$solid-red: #FF5555;
 
 /* LAYOUT */
 
@@ -170,5 +171,32 @@ h2 {
 		color: rgba(0, 0, 0, 0.8);
 		opacity: 1.00;
 
+	}
+	.yup, .nope {
+		position: absolute;
+		padding: 10px 0px;
+		width: 200px;
+		text-align: center;
+		bottom: 0px;
+		border-radius: 40px;
+		left: 50%;
+		margin-left: -100px;
+		p {
+			font-family: "Source Sans Pro";
+			font-style: normal;
+			font-weight: 600;
+			font-size: 16px;
+			line-height: 100%;
+			letter-spacing: 1.8px;
+			color: #FFFFFF;
+			text-transform: uppercase;
+		}
+	}
+	.yup {
+		background: $primary-color;
+
+	}
+	.nope {
+		background: $solid-red;
 	}
 }
