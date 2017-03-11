@@ -5,7 +5,7 @@ import {observer} from 'mobx-react';
 import NavigationView from './NavigationView.jsx';
 import SwipeCards from '../components/SwipeCards.jsx';
 import Card from '../components/Card.jsx';
-import AnimTest from '../components/AnimTest.jsx';
+import ProgressBar from '../components/ProgressBar.jsx';
 
 const Cards = [
     {text: 'Tomato', backgroundColor: 'red'},
@@ -21,15 +21,22 @@ export default class LearnView extends Component {
     constructor() {
         super();
         this.state = {
-            cards: Cards
+            cards: Cards,
+            progress: 0
         }
     }
+    storeProgress() {
+        this.setState({ progress: this.state.progress + 1});
+    }
     handleYup (card) {
-        console.log(`Yup for ${card.text}`)
+        console.log(`Yup for ${card.text}`);
+        this.storeProgress();
     }
     handleNope (card) {
-        console.log(`Nope for ${card.text}`)
+        console.log(`Nope for ${card.text}`);
+        this.storeProgress();
     }
+
     render() {
         return (
             <div>
@@ -38,13 +45,14 @@ export default class LearnView extends Component {
                     cards = {this.state.cards}
                     renderCard = {(cardData) => <Card {...cardData} />}
                     renderNoMoreCards={() => <div>No more cards</div>}
-                    handleYup={this.handleYup}
-                    handleNope={this.handleNope}
+                    handleYup={this.handleYup.bind(this)}
+                    handleNope={this.handleNope.bind(this)}
                     stack={true}
                     stackOffsetY={-10}
                     yupText={"Gewusst"}
                     nopeText={"Nicht Gewusst"}
                 />
+                <ProgressBar progress={this.state.progress} total={this.state.cards.length} combo={null} />
             </div>
         );
     }

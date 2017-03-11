@@ -1,7 +1,12 @@
 @import 'reset';
+@import 'variables';
+
+// Component Import
 @import 'footer';
 @import 'login';
-@import 'variables';
+@import 'progressBar';
+
+
 
 /** CSS FILE FOR KARDS WEBAPP
 
@@ -174,3 +179,4 @@ h2 {
 		background: $solid-red;
 	}
 }
+
