@@ -26,13 +26,17 @@ export default class LoginView extends Component {
                 <div className="container">
                     <div className="login">
                         <h1>Knub.io</h1>
-                        <h2>Lerne & teile dein Wissen.</h2>
+                        <h2>Lerne und teile dein Wissen.</h2>
                         <div className="card">
+                            <p>E-Mail Addresse</p>
                             <input id="login_input_email" placeholder="Deine E-Mail Adresse" type="mail" />
-                            <hr />
+                            <p>Passwort</p>
                             <input id="login_input_password" placeholder="Dein Passwort" type="password" />
+                            <button className="btn btn-primary" onClick={this.handleLogin}>Login</button>
                         </div>
-                    <button className="btn btn-primary" onClick={this.handleLogin}>Login</button>
+                        <div className="signup">
+                            <p>Neu bei Knub? <a href="#">Erstelle einen Account.</a></p>
+                        </div>
                     </div>
                 </div>
         );

@@ -1,4 +1,7 @@
 @import 'reset';
+@import 'footer';
+@import 'login';
+@import 'variables';
 
 /** CSS FILE FOR KARDS WEBAPP
 
@@ -11,12 +14,6 @@ $container-width: 1000px;
 $gutter: 20px;
 $cols: 12;
 
-// Colors
-$almost-black: #333333;
-$primary-color: #00BC80;
-$primary-color-darker: #009767;
-$solid-grey: #969696;
-$solid-red: #FF5555;
 
 /* LAYOUT */
 
@@ -95,34 +92,8 @@ h2 {
 	margin-top: 10px;
 }
 
-/* LOGIN */
-.login {
-  	width: 320px;
-  	margin: 160px auto;
-	text-align: center;
-
-	input {
-		width: 100%;
-		-webkit-apperance: none;
-		border: 0px;
-		padding: 10 0px;
-		font-size: 1em;
-		margin:0;
-		box-sizing: border-box;
-		color: $almost-black;
-	}
-
-	hr {
-		border: 0;
-		height: 1px;
-		background: #C4C4C4;
-	}
-	.card {
-		margin: 40px 0;
-	}
-}
-
 /* NAVIGATION */
+
 .nav_wrapper {
 	width: 100%;
 	overflow: hidden;

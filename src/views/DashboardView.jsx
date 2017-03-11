@@ -5,7 +5,7 @@ import {observer} from 'mobx-react';
 import UserStore from '../stores/UserStore.jsx';
 import ProfileView from './ProfileView.jsx';
 import NavigationView from './NavigationView.jsx';
-import FooterView from '../components/FooterView.jsx';
+import FooterView from '../components/Footer.jsx';
 
 @observer
 export default class DashboardView extends Component {

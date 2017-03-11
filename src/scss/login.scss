@@ -1,0 +1,51 @@
+@import 'variables';
+
+/** CSS FILE FOR KNUB.IO WEBAPP
+
+  LOGIN
+
+  @author: Martin Bucher, Michael Ziörjen
+  @version: 2016-03-11
+
+*/
+
+
+.login {
+  width: 320px;
+  margin: 160px auto;
+  text-align: center;
+
+  p {
+    text-align: left;
+    font-size: 1rem;
+    margin-bottom: 0.309em;
+    font-family: $sans;
+  }
+  
+  .signup p {
+    text-align: center;
+  }
+
+  input {
+    width: 100%;
+    -webkit-apperance: none;
+    border: 1px solid #d2d2d2;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 1em;
+    padding: 0.6em 0.8em;
+    margin: 0;
+    box-sizing: border-box;
+    color: $almost-black;
+    margin-bottom: 1em;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .card {
+    margin: 40px 0;
+  }
+
+}
