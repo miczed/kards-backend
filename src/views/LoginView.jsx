@@ -19,7 +19,7 @@ export default class LoginView extends Component {
 
     };
     componentWillMount() {
-        console.log(this.props.location.state.from);
+
     }
     render() {
         return (

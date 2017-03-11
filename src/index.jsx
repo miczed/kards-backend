@@ -42,7 +42,8 @@ function PublicRoute ({component: Component, authed, ...rest}) {
             {...rest}
             render={(props) => authed === false
                 ? <Component {...props} />
-                : (props.location.state) ? <Redirect to={props.location.state.from.pathname} />  : <Redirect to='/dashboard' />}
+                :  (props && props.location && props.location.from) ? <Redirect to={props.location.state.from.pathname} /> : <Redirect to='/dashboard' />
+            }
         />
     )
 }
