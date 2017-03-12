@@ -8,13 +8,15 @@ import Card from '../components/Card.jsx';
 import ProgressBar from '../components/ProgressBar.jsx';
 
 const Cards = [
-    {text: 'Tomato', backgroundColor: 'red'},
+    {title: 'Tomato', backgroundColor: 'red'},
     {text: 'Aubergine', backgroundColor: 'purple'},
     {text: 'Courgette', backgroundColor: 'green'},
     {text: 'Blueberry', backgroundColor: 'blue'},
     {text: 'Umm...', backgroundColor: 'cyan'},
     {text: 'orange', backgroundColor: 'orange'},
 ]
+
+
 
 @observer
 export default class LearnView extends Component {

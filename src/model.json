@@ -1,0 +1,43 @@
+{
+    "sets" : {
+        "set_key" : {
+            "title" : "Hustling Like A pro",
+            "views" : 120,
+            "collaborators" : {
+                "user1_key" : true,
+                "user2_key" : true
+            },
+            "cards" : {
+                "card1_key" : true,
+                "card2_key" : true
+            },
+          "fork_of" : "set1_key"
+        }
+   },
+
+    "users" : {
+      "user_key" : {
+          "firstname" : "Hans",
+          "lastname" : "Wurst",
+          "sets" : {
+              "set1_key" : true,
+              "set2_key" : true
+          }
+      }
+    },
+
+    "cards" : {
+      "card_key" : {
+        "front_delta": {},
+        "front_html" : {},
+        "back_delta" : {},
+        "back_html" : {},
+        "collaborators" : {
+          "user1_key" : true,
+          "user2_key": true
+        },
+        "views" : 120,
+        "fork_of" : "card1_key"
+      }
+    }
+}
