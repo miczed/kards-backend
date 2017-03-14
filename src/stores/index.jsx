@@ -4,7 +4,7 @@
 import UserStore from './UserStore.jsx';
 import SetStore from './SetStore';
 
-/* Merge all stores */
+
 
 export {
     UserStore,

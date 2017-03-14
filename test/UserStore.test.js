@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import UserStore from '../src/stores/UserStore.jsx';
 
 describe('Testing the UserStore', () => {
-    const email = "testing@knub.io";
+    const email = "userstore@knub.io";
     const password = "hulibuly";
     const username = "testuser";
     const firstname = "Max";

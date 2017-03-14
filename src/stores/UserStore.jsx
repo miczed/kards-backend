@@ -132,6 +132,8 @@ class UserStore {
         if(user) {
             return firebaseApp.database().ref('/users/' + user.uid).remove().then(() => {
                 return user.delete();
+                // TODO: delete all sets, where user is only collaborator
+                // TODO: delete user from all sets, where he / she is a collaborator
             }).then(() => {
                 this.user = null;
             });
