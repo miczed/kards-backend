@@ -1,10 +1,12 @@
 /**
  * Created by michaelziorjen on 26.01.17.
  */
-import Login from './login';
+import UserStore from './UserStore.jsx';
+import SetStore from './SetStore';
 
 /* Merge all stores */
 
 export {
-    Login
+    UserStore,
+    SetStore,
 };
