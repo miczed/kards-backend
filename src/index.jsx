@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 
 import { BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom'
 
+import SignUpView from './views/SignUpView.jsx';
 import LoginView from './views/LoginView.jsx';
 import DashboardView from './views/DashboardView.jsx';
 import LearnView from './views/LearnView.jsx';
@@ -83,6 +84,7 @@ export default class App extends Component {
           <Router>
               <Switch>
                   <PrivateRoute path='/' exact component={DashboardView} />
+                  <PublicRoute authed={this.state.authed} path='/signup' component={SignUpView} />
                   <PublicRoute authed={this.state.authed} path='/login' component={LoginView} />
                   <PrivateRoute authed={this.state.authed} path='/dashboard' component={DashboardView} />
                   <PrivateRoute authed={this.state.authed} path='/learn' component={LearnView} />

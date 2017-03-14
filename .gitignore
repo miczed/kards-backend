@@ -31,3 +31,6 @@ old/node_modules
 #IDE specific files
 .idea
 workspace.xml
+
+# Bundle.js causes fucking merge conflicts every fucking time
+dist/js/bundle.js
