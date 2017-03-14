@@ -4,7 +4,7 @@
   "description": "Webapp for the Kards Application",
   "main": "index.html",
   "scripts": {
-    "test": "mocha --compilers js:babel-register --require babel-polyfill",
+    "test": "mocha --compilers js:babel-register --require babel-polyfill --bail",
     "dev": "webpack -d --watch",
     "build": "webpack -p"
   },
