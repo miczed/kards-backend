@@ -1,0 +1,107 @@
+/** CSS FILE FOR KNUB.IO WEBAPP
+
+  SIGNUP
+
+  @author: Martin Bucher, Michael Ziörjen
+  @version: 2016-03-13
+
+*/
+
+.signup_header {
+  text-align: center;
+  padding: 4.236em 0 2.618em;
+}
+
+.signup {
+
+  .card, .login_link {
+    width: 25em;
+    margin: 0 auto;
+  }
+
+  .card {
+    margin-bottom: 1em;
+  }
+
+  h2 {
+    font-size: 2.618em;
+    margin-bottom: 0.309em;
+    font-weight: 400;
+    text-align: center;
+    color: $almost-black;
+  }
+
+  h1 {
+    font-size: 1.618em;
+    font-weight: 400;
+    margin-bottom: 1.618em;
+    text-align: center;
+    color: $solid-grey;
+  }
+
+  p {
+    text-align: left;
+    font-size: 1rem;
+    margin-bottom: 0.309em;
+    font-family: $sans;
+  }
+
+  .signup_input_wrapper {
+    margin-bottom: 0.618em;
+  }
+
+  input {
+    width: 100%;
+    -webkit-apperance: none;
+    border: 1px solid #d2d2d2;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 1em;
+    padding: 0.6em 0.8em;
+    margin: 0;
+    box-sizing: border-box;
+    color: $almost-black;
+    margin-bottom: 0.618em;
+  }
+
+  .signup_input_error {
+    border-color: $solid-red;
+  }
+
+  .signup_error {
+    font-family: $sans;
+    color: $solid-red;
+    margin-bottom: 1em;
+  }
+
+  .signup_recaptcha div {
+    margin-bottom: 1.618em;
+  }
+
+  button {
+    width: 100%;
+    padding: 1em 0.8em;
+  }
+
+  button:disabled {
+    opacity: 0.4;
+    cursor: auto;
+  }
+
+  .login_link {
+    padding: 1em 0;
+    color: $solid-grey;
+    margin-bottom: 6.85em;
+    border-radius: 5px;
+
+    p {
+      text-align: center;
+    }
+
+    a {
+      color: $solid-grey;
+    }
+
+  }
+
+}
