@@ -1,5 +1,7 @@
 import { observable, computed, action} from 'mobx';
 import firebaseApp from '../helpers/firebase.jsx';
+import {reaction, transaction} from 'mobx';
+
 
 /* BEWARE: When writing to Maps we should use transactions, otherwise a lot of events get fired from mobx */
 
@@ -19,7 +21,7 @@ export default class SetStore {
         });
         firebaseApp.database().ref('users').child(userStore.user.uid).child('sets').on('child_removed', (snap) => {
             // A set was deleted on the server => delete it from the client
-            if(!this.sets.get(snap.key)) {
+            if(this.sets.get(snap.key)) {
                 this.sets.get(snap.key).delete();
                 this.sets.delete(snap.key);
             }
@@ -36,7 +38,7 @@ export default class SetStore {
 
     /**
      * Gets the ref to a single set
-     * @param key : Firebase Key of the Set
+     * @param key : String Firebase Key of the Set
      * @returns {*} Firebase Reference
      */
     getSingleRef(key) {
@@ -44,9 +46,9 @@ export default class SetStore {
     }
 
     /**
-     * UNTESTED
      * Creates a new set on the client and on firebase and adds it to the store
-     * @param creator : User which created the set
+     * @pre User is logged in
+     * @post User is added as a collaborator to set
      * @param title : String title of the set
      */
     create(title) {
@@ -61,8 +63,10 @@ export default class SetStore {
         collaborators.set(user.uid,true);
 
         let set = new Set(this,key,title,views,collaborators,cards,null);
+        set.autoSave = false;
         return this.getAllRef().child(key).set(set.asJson).then(() => { // Store set to firebase
             this.sets.set(key,set); // Store set in store
+            set.autoSave = true;
             return set;
         }).then((set) => {
             // TODO: save set to users tree
@@ -71,7 +75,6 @@ export default class SetStore {
     }
 
     /**
-     * UNTESTED
      * Deletes a set on the client and on firebase and removes it from the store
      * @param set:Set which should be deleted
      */
@@ -79,6 +82,7 @@ export default class SetStore {
         this.sets.delete(set.key); // Remove set from store
         set.remove(); // Prepares element for deletion
         return this.getAllRef().child(set.key).remove().then(() => { // Remove from firebase database
+            return true;
             //UserStore.deleteSetFromUser(set.key) // TODO: remove set from users tree
         });
     }
@@ -99,6 +103,9 @@ export class Set {
 
     fork_of = null;
 
+    autoSave = null; // Updates from server only get applied if this flag is set to true
+    saveHandler = false;
+
     constructor(store,key,title,views, collaborators, cards, fork_of) {
         this.store = store;
         this.key = key;
@@ -107,11 +114,49 @@ export class Set {
         this.collaborators = collaborators;
         this.cards = cards;
         this.fork_of = fork_of;
+        this.autoSave = true;
 
-        // Set is listening on itself, to make changes to itself
-        this.store.getSingleRef(key).on('child_changed',(snap) => {
-           // TODO Update self
+        // Set is listening on itself on the server, to make changes to itself
+        this.store.getSingleRef(key).on('value',(snap) => {
+            if(this.autoSave) {
+                this.updateFromJson(snap.val());
+            } else {
+                this.autoSave = true;
+            }
+
         });
+
+        this.saveHandler = reaction(
+            () => this.asJson,
+            (json) => {
+                if(this.autoSave) {
+                    this.store.getSingleRef(this.key).update(json).then(() => {});
+                    this.autoSave = false;
+                }
+            }
+        )
+    }
+
+    /**
+     * Updates the object based on a jsobject
+     * @param json
+     */
+    updateFromJson(json) {
+        this.autoSave = false; // make sure our changes aren't sent back to the server
+        this.title = json.title;
+        this.views = json.views;
+        this.collaborators.clear();
+        for (let [key, value] of Object.entries(json.collaborators)) {
+            this.collaborators.set(key,value);
+        }
+        this.cards.clear();
+        for (let [key, value] of Object.entries(json.cards)) {
+            this.cards.set(key,value);
+        }
+        this.fork_of = json.fork_of;
+
+        this.autoSave = true;
+
     }
 
     @computed get asJson() {
@@ -129,6 +174,7 @@ export class Set {
      */
     remove() {
         this.store.getSingleRef(this.key).off();
+        this.saveHandler(); // clean up the observer
     }
 
 }
