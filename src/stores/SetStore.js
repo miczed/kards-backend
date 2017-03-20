@@ -27,7 +27,7 @@ export default class SetStore {
         firebaseApp.database().ref('users').child(userStore.user.uid).child('sets').on('child_removed', (snap) => {
             // A set was deleted on the server => delete it from the client
             if(this.sets.get(snap.key)) {
-                this.sets.get(snap.key).delete();
+                this.sets.get(snap.key).remove();
                 this.sets.delete(snap.key);
             }
         });
@@ -77,7 +77,7 @@ export default class SetStore {
             set.autoSave = true;
             return set;
         }).then((set) => {
-            // TODO: This doesn't always work -> WHY NOT? 
+            // TODO: This doesn't always work -> WHY NOT?
             this.userStore.getSetsRef().child(set.key).set(true);
             return set;
         });
