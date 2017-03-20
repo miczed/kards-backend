@@ -7,13 +7,33 @@
 
 */
 
-.footer {
+.footer_wrapper {
+  position: absolute;
+  bottom: 2.618em;
   width: 100%;
+  margin: 2.618em 0 0;
+}
+
+.footer {
+  width: $container-width;
+  margin: 0 auto;
+  padding-top: 1.618em;
+  //border-top: 1px solid $light-grey;
 }
 
 .footer_copyright, .footer_logo, .footer_links {
   width: 33.333333%;
   float: left;
+  font-family: $sans;
+  color: $solid-grey;
+}
+
+.footer_logo {
+  text-align: center;
+}
+
+.footer_links {
+  text-align: right;
 }
 
 

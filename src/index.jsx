@@ -3,10 +3,11 @@ import {render} from 'react-dom';
 
 import { BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom'
 
-import SignUpView from './views/SignUpView.jsx';
-import LoginView from './views/LoginView.jsx';
 import DashboardView from './views/DashboardView.jsx';
 import LearnView from './views/LearnView.jsx';
+import LoginView from './views/LoginView.jsx';
+import SignUpView from './views/SignUpView.jsx';
+import ProfileView from './views/ProfileView.jsx';
 
 import {observer} from 'mobx-react';
 import {reaction, useStrict } from 'mobx';
@@ -87,6 +88,7 @@ export default class App extends Component {
                   <PublicRoute authed={this.state.authed} path='/signup' component={SignUpView} />
                   <PublicRoute authed={this.state.authed} path='/login' component={LoginView} />
                   <PrivateRoute authed={this.state.authed} path='/dashboard' component={DashboardView} />
+                  <PrivateRoute authed={this.state.authed} path='/profile' component={ProfileView} />
                   <PrivateRoute authed={this.state.authed} path='/learn' component={LearnView} />
                   <Route render={() => <h3>No Match</h3>} />
               </Switch>

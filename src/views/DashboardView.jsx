@@ -4,7 +4,6 @@ import {render} from 'react-dom';
 import {observer} from 'mobx-react';
 import {reaction } from 'mobx';
 import { SetStore, UserStore } from '../stores/index.jsx';
-import ProfileView from './ProfileView.jsx';
 import NavigationView from './NavigationView.jsx';
 import FooterView from '../components/Footer.jsx';
 import SetList from '../components/SetList.jsx';
@@ -32,7 +31,6 @@ export default class DashboardView extends Component {
                     </div>
                     <SetList sets={this.setStore.sets} />
                 </div>
-                <ProfileView />
                 <FooterView />
                 {this.props.children}
             </div>

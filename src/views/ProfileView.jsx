@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import firebaseApp from '../helpers/firebase.jsx';
 
+import NavigationView from './NavigationView.jsx';
+import FooterView from '../components/Footer.jsx';
+
 import {observer} from 'mobx-react';
 import UserStore from '../stores/UserStore.jsx';
 
@@ -45,21 +48,25 @@ export default class ProfileView extends Component {
     };
     render() {
         return (
-            <div className="profile">
-                <p>Profile Component</p>
-                <p>Username: {UserStore.username}</p>
-                <form onSubmit={this.handleSubmit}>
-                    <label>Username</label>
-                    <input type="text" id="profile_input_username" value={this.state.username} onChange={this.handleChange}/>
-                    { this.state.errors["profile_input_username"] ? <span className="error">Username cannot be empty.</span> : null}
-                    <label>First Name</label>
-                    <input type="text" id="profile_input_firstname" value={this.state.firstname} onChange={this.handleChange}/>
-                    { this.state.errors["profile_input_firstname"] ? <span className="error">Firstname cannot be empty.</span> : null}
-                    <label>Last Name</label>
-                    <input type="text" id="profile_input_lastname" value={this.state.lastname} onChange={this.handleChange}/>
-                    { this.state.errors["profile_input_lastname"] ? <span className="error">Lastname cannot be empty.</span> : null}
-                    <input type="submit" value="Submit" />
-                </form>
+            <div>
+                <NavigationView />
+                <div className="profile">
+                    <p>Profile Component</p>
+                    <p>Username: {UserStore.username}</p>
+                    <form onSubmit={this.handleSubmit}>
+                        <label>Username</label>
+                        <input type="text" id="profile_input_username" value={this.state.username} onChange={this.handleChange}/>
+                        { this.state.errors["profile_input_username"] ? <span className="error">Username cannot be empty.</span> : null}
+                        <label>First Name</label>
+                        <input type="text" id="profile_input_firstname" value={this.state.firstname} onChange={this.handleChange}/>
+                        { this.state.errors["profile_input_firstname"] ? <span className="error">Firstname cannot be empty.</span> : null}
+                        <label>Last Name</label>
+                        <input type="text" id="profile_input_lastname" value={this.state.lastname} onChange={this.handleChange}/>
+                        { this.state.errors["profile_input_lastname"] ? <span className="error">Lastname cannot be empty.</span> : null}
+                        <input type="submit" value="Submit" />
+                    </form>
+                </div>
+                <FooterView />
             </div>
         );
     }
