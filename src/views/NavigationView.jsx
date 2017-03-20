@@ -16,7 +16,7 @@ export default class NavigationView extends Component {
         return (
           <div className="nav_wrapper">
             <div className="nav container">
-              <p className="nav_logo">Kards</p>
+              <p className="nav_logo">Knub.io</p>
               {/* <input placeholder="Hier kommt die Suchbar..." /> */}
               <div className="nav_user">
                 <p className="userPic">[Pic]</p>

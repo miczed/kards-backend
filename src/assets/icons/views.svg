@@ -1,0 +1,20 @@
+<svg width="16" height="11" viewBox="0 0 16 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:figma="http://www.figma.com/figma/ns">
+    <title>Line Icons</title>
+    <desc>Created using Figma</desc>
+    <g id="Canvas" transform="translate(339 -900)" figma:type="canvas">
+        <g id="Line Icons" figma:type="frame">
+            <g id="Group" figma:type="frame">
+                <g id="Vector" figma:type="vector">
+                    <use xlink:href="#path0_fill" transform="translate(-339 900)" fill="#C4C4C4"/>
+                </g>
+                <g id="Vector" figma:type="vector">
+                    <use xlink:href="#path1_fill" transform="translate(-333.909 902.182)" fill="#C4C4C4"/>
+                </g>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <path id="path0_fill" d="M 15.8669 4.67273C 15.7331 4.48145 12.5251 0 8 0C 3.47491 0 0.266909 4.48145 0.133091 4.67273C -0.0443637 4.92364 -0.0443637 5.25891 0.133091 5.50982C 0.266909 5.70036 3.47491 10.1818 8 10.1818C 12.5251 10.1818 15.7331 5.70036 15.8669 5.50982C 16.0444 5.25818 16.0444 4.92364 15.8669 4.67273ZM 8 8.72727C 4.97018 8.72727 2.50982 6.12727 1.65018 5.09018C 2.50764 4.05309 4.96 1.45455 8 1.45455C 11.0298 1.45455 13.4902 4.05527 14.3498 5.09164C 13.4924 6.12945 11.04 8.72727 8 8.72727Z"/>
+        <path id="path1_fill" d="M 2.90909 0C 1.30473 0 0 1.30545 0 2.90909C 0 4.51345 1.30473 5.81818 2.90909 5.81818C 4.51345 5.81818 5.81818 4.51345 5.81818 2.90909C 5.81818 1.30545 4.51345 0 2.90909 0ZM 2.90909 4.36364C 2.10691 4.36364 1.45455 3.71127 1.45455 2.90909C 1.45455 2.10764 2.10691 1.45455 2.90909 1.45455C 3.71127 1.45455 4.36364 2.10764 4.36364 2.90909C 4.36364 3.71127 3.71127 4.36364 2.90909 4.36364Z"/>
+    </defs>
+</svg>

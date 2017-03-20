@@ -10,12 +10,19 @@ export default class FooterView extends React.Component {
 
     render() {
         return (
+<<<<<<< HEAD
           <div className="footer_wrapper">
               <div className="footer">
                 <p className="footer_copyright">© {new Date().getFullYear()} Knub. </p>
                 <p className="footer_logo">Knub Logo</p>
                 <p className="footer_links">Other useful links...</p>
               </div>
+=======
+          <div className="footer container">
+            <p className="footer_copyright">© {new Date().getFullYear()} Knub. </p>
+            <p className="footer_logo">Knub Logo</p>
+            <p className="footer_links">Other useful links...</p>
+>>>>>>> master
           </div>
         );
     }
