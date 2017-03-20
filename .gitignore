@@ -32,5 +32,5 @@ old/node_modules
 .idea
 workspace.xml
 
-# Bundle.js causes fucking merge conflicts every fucking time
-dist/js/bundle.js
+# Exclude dist folder, because it's not needed in git repo
+dist/

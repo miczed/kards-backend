@@ -45,7 +45,7 @@ export default class ProfileView extends Component {
     };
     render() {
         return (
-            <div className="profile">
+            <div className="profile container">
                 <p>Profile Component</p>
                 <p>Username: {UserStore.username}</p>
                 <form onSubmit={this.handleSubmit}>

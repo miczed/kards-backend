@@ -9,7 +9,15 @@ export default class SetList extends React.Component {
         set.store.remove(set.key);
     }
     renderSet(key,set) {
-        return ( <li className="card" key={key}>{set.title} <a href="#" onClick={ () => { this.removeSet(set) } }>Delete</a><Icon name="cards"/></li> );
+        return (
+            <li className="card set" key={key}>
+                <h3>{set.title}</h3> <a href="#" onClick={ () => { this.removeSet(set) } }>Delete</a>
+                <div className="meta">
+                    <Icon name="cards"/><span>{set.cards.size}</span>
+                    <Icon name="collaborators"/><span>{set.collaborators.size}</span>
+                    <Icon name="views"/><span>{set.views}</span>
+                </div>
+            </li> );
     }
     render() {
         return (
