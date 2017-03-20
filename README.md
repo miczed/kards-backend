@@ -1,4 +1,9 @@
-# kards-backend
+# Knub.io Web Client
+A collaborative knowledge hub for students and teachers. 
+Developed by @mnbucher & @miczed.
+
+
+www.knub.io 
 
 ## How to run locally:
 1. Run `npm run dev` for a local dev environment
