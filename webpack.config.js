@@ -2,6 +2,7 @@ var Webpack = require('webpack');
 var Path = require('path');
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 var historyApiFallback = require('connect-history-api-fallback');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var BUILD_DIR = Path.resolve(__dirname, 'dist');
 var APP_DIR = Path.resolve(__dirname, 'src');
@@ -34,7 +35,12 @@ var config = {
       host: 'localhost',
       port: 3000,
       server: { baseDir: ['dist'], middleware: [ historyApiFallback() ] }
-    })
+    }),
+      new CopyWebpackPlugin([ // Copies files from src asset folder to dist asset folder
+          { from: APP_DIR + "/assets",
+            to: BUILD_DIR + "/assets"
+          }
+      ])
   ],
 
     devtool: "#cheap-eval-source-map"
