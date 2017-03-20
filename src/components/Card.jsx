@@ -11,8 +11,8 @@ export default class Card extends Component {
     };
     render() {
         return(
-            <div className="card" onClick={this.clickHandler}>
-                { this.state.front ? <div className="front">{this.props.text}</div> : <div className="front">Backside.</div>}
+            <div className={"card " + (this.state.front ? "showFront" : "showBack")} onClick={this.clickHandler}>
+                { this.state.front ? <div className="front face">{this.props.text}</div> : <div className="back face">Backside.</div> }
             </div>
         );
     }

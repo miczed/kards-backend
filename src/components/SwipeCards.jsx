@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 import clamp from 'clamp';
 
 
-const SWIPE_THRESHOLD = 120;
+const SWIPE_THRESHOLD = 160;
 
 const styles = {
     container: {
@@ -336,11 +336,10 @@ export default class SwipeCards extends Component {
                     `,
                     opacity,
                     position: 'absolute',
-                    top: 0,
                     width: '100%',
                 };
 
-                return <Animated.div key={card[this.props.cardKey]} style={animatedCardStyles} >
+                return <Animated.div key={card[this.props.cardKey]} style={animatedCardStyles} className="active">
                     {this.props.renderCard(this.state.card)}
                 </Animated.div>;
             }
@@ -370,7 +369,7 @@ export default class SwipeCards extends Component {
             width: '100%',
         };
 
-        return <Animated.div key={"top"} style={animatedCardStyles} >
+        return <Animated.div key={"top"} style={animatedCardStyles} className="active">
             {this.props.renderCard(this.state.card)}
         </Animated.div>;
     }

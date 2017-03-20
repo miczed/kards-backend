@@ -4,7 +4,7 @@ import { SetStore, UserStore } from '../src/stores';
 import {observer} from 'mobx-react';
 import {reaction } from 'mobx';
 
-describe('Testing the SetStore', () => {
+describe.only('Testing the SetStore', () => {
     const email = "setstore@knub.io";
     const password = "hulibuly";
     const username = "testuser";
@@ -33,7 +33,6 @@ describe('Testing the SetStore', () => {
 
     it('should create a new set for the user testing@knub.io',() => {
         return setStore.create(setTitle).then((set) => {
-
             expect(setStore.sets.size, "Set was successfully added to store").to.equal(1);
             expect(setStore.sets.get(set.key), "Set is accessible with its key").to.equal(set);
             expect(set.title, "Set title was successfully set.").to.equal(setTitle);
@@ -41,6 +40,9 @@ describe('Testing the SetStore', () => {
             expect(set.cards.size, "Cards map was successfully created").to.equal(0);
             expect(set.views, "Views were successfully set to zero").to.equal(0);
             globalSet = setStore.sets.get(set.key);
+            UserStore.getSetsRef().child(set.key).once("value",(snap) => {
+                expect(snap.val(), "Set was not stored to user's firebase tree").to.equal(true);
+            })
         })
     });
     it('should update the set based on another json object',() => {
@@ -63,20 +65,19 @@ describe('Testing the SetStore', () => {
             expect(globalSet.title, "Title was not updated correctly locally from firebase").to.equal(json.title);
         });
     });
-    /*it('should delete the set we created before', () => {
-       return setStore.remove(globalSet).then(() => {
+    it('should delete the set we created before', () => {
+       return setStore.remove(globalSet.key).then(() => {
             const setKey = globalSet.key;
             expect(setStore.sets.get(setKey), "Set was successfully deleted from store").to.equal(undefined);
             expect(globalSet, "Set was succesfully deleted from client");
             expect(setStore.sets.size, "Sets map is now empty").to.equal(0);
        });
-    });*/
+    });
     after(() => {
         UserStore.deleteUser();
         return true;
     });
-    // TODO: Write test for deleting
-    // TODO: write test for updating
+
     // TODO: write test for adding / removing collaborators
 
 });

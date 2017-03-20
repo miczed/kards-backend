@@ -11,13 +11,18 @@ export default class SetStore {
     constructor(userStore) {
         this.userStore = userStore;
         firebaseApp.database().ref('users').child(userStore.user.uid).child('sets').on('child_added', (snap) => {
-            this.getSingleRef(snap.key).once((snap) => {
-               // A new set was created on the server
-                if(!this.sets.get(snap.key)) { // add set to client if it didn't already happen
-                    let set = new Set(snap.key,snap.title,snap.views,snap.collaborators,snap.cards,snap.fork_of);
-                    this.sets.set(snap.key,set);
-                }
-            });
+            if(!this.sets.get(snap.key)) {
+                let set = new Set(this,snap.key);
+                this.sets.set(snap.key,set);
+                /*this.getSingleRef(snap.key).once('value',(snap) => {
+                    // A new set was created on the server
+                    if(!this.sets.get(snap.key)) { // add set to client if it didn't already happen
+                        console.log('New set was added on the server.',snap.val());
+                        let set = new Set(this,snap.key,snap.val().title,snap.val().views,snap.val().collaborators,snap.val().cards,snap.val().fork_of);
+                        this.sets.set(snap.key,set);
+                    }
+                });*/
+            }
         });
         firebaseApp.database().ref('users').child(userStore.user.uid).child('sets').on('child_removed', (snap) => {
             // A set was deleted on the server => delete it from the client
@@ -56,6 +61,9 @@ export default class SetStore {
         if(!user) {
             return Promise.reject(new Error('You have to be logged in, to create a new set.'));
         }
+        if(!title || title == "") {
+            return Promise.reject(new Error('The title of a set cannot be empty.'));
+        }
         const key = this.getAllRef().push().key;
         const views = 0;
         const collaborators = new Map();
@@ -69,21 +77,24 @@ export default class SetStore {
             set.autoSave = true;
             return set;
         }).then((set) => {
-            // TODO: save set to users tree
+            // TODO: This doesn't always work -> WHY NOT? 
+            this.userStore.getSetsRef().child(set.key).set(true);
             return set;
         });
     }
 
     /**
      * Deletes a set on the client and on firebase and removes it from the store
-     * @param set:Set which should be deleted
+     * @param setKey : String key of the set which should be deleted
      */
-    remove(set)  {
-        this.sets.delete(set.key); // Remove set from store
-        set.remove(); // Prepares element for deletion
+    remove(setKey)  {
+        const set = this.sets.get(setKey);
+        if(set) {
+            this.sets.delete(setKey); // Remove set from store
+            set.remove(); // Prepares element for deletion
+        }
         return this.getAllRef().child(set.key).remove().then(() => { // Remove from firebase database
-            return true;
-            //UserStore.deleteSetFromUser(set.key) // TODO: remove set from users tree
+            return this.userStore.getSetsRef().child(set.key).remove(); // Remove from user tree
         });
     }
 }
@@ -103,23 +114,27 @@ export class Set {
 
     fork_of = null;
 
-    autoSave = null; // Updates from server only get applied if this flag is set to true
+    autoSave = null; // Updates from / to server only get applied if this flag is set to true
     saveHandler = false;
 
-    constructor(store,key,title,views, collaborators, cards, fork_of) {
+    constructor(store,key,title = "",views = 0, collaborators = {}, cards = {}, fork_of = null) {
         this.store = store;
         this.key = key;
         this.title = title;
         this.views = views;
-        this.collaborators = collaborators;
-        this.cards = cards;
+        this.collaborators.replace(collaborators);
+        this.cards.replace(cards);
         this.fork_of = fork_of;
         this.autoSave = true;
 
         // Set is listening on itself on the server, to make changes to itself
         this.store.getSingleRef(key).on('value',(snap) => {
+            console.log("I changed on Firebase");
             if(this.autoSave) {
+                console.log("I will update myself.", snap.val());
+                this.autoSave = false;
                 this.updateFromJson(snap.val());
+                this.autoSave = true;
             } else {
                 this.autoSave = true;
             }
@@ -129,9 +144,11 @@ export class Set {
         this.saveHandler = reaction(
             () => this.asJson,
             (json) => {
+                console.log("I changed locally");
                 if(this.autoSave) {
+                    console.log('I will push my updates to firebase');
+                    this.autoSave = false; // Set autosave to false, so changes aren't updated from firebase.
                     this.store.getSingleRef(this.key).update(json).then(() => {});
-                    this.autoSave = false;
                 }
             }
         )
@@ -141,30 +158,24 @@ export class Set {
      * Updates the object based on a jsobject
      * @param json
      */
-    updateFromJson(json) {
-        this.autoSave = false; // make sure our changes aren't sent back to the server
+    @action updateFromJson(json) {
+        console.log('I will update myself based on JSON values');
         this.title = json.title;
         this.views = json.views;
-        this.collaborators.clear();
-        for (let [key, value] of Object.entries(json.collaborators)) {
-            this.collaborators.set(key,value);
-        }
-        this.cards.clear();
-        for (let [key, value] of Object.entries(json.cards)) {
-            this.cards.set(key,value);
-        }
+        if(!json.collaborators) { json.collaborators = {}};
+        if(!json.cards) { json.cards = {}};
+        this.collaborators.replace(json.collaborators);
+        this.cards.replace(json.cards);
         this.fork_of = json.fork_of;
-
-        this.autoSave = true;
-
     }
+
 
     @computed get asJson() {
         return {
             title: this.title,
             views: this.views,
-            collaborators: this.collaborators.toJS(),
-            cards: this.cards.toJS(),
+            collaborators: (this.collaborators ? this.collaborators.toJS() : null) ,
+            cards: (this.cards ? this.cards.toJS() : null),
             fork_of: this.fork_of,
         };
     }

@@ -1,5 +1,6 @@
 @import 'reset';
 @import 'variables';
+@import 'animations';
 
 // Component Import
 @import 'footer';
@@ -38,7 +39,6 @@ body {
 
 /* Component Styles */
 .card {
-	/* Rectangle */
 	background: #FFFFFF;
 	opacity: 1.00;
 	border: 1px solid #E9E9E9;
@@ -46,7 +46,10 @@ body {
 	border-radius: 3px;
 	padding: 20px;
 	margin: 20px 0;
+    position: relative;
+
 }
+
 .btn {
 	border-radius: 3px;
 	font-family: "Source Sans Pro";
@@ -60,6 +63,7 @@ body {
 	cursor: pointer;
 	transition: all linear 0.2s;
 	text-decoration: none;
+    display: inline-block;
 }
 .btn-primary {
 	background: $primary-color;
@@ -150,6 +154,7 @@ h2 {
 		opacity: 1.00;
 		height: 320px;
 		z-index: 20;
+        margin: 0px;
 	}
 	.yup, .nope {
 		position: absolute;

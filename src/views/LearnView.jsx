@@ -53,6 +53,7 @@ export default class LearnView extends Component {
                     stackOffsetY={-10}
                     yupText={"Gewusst"}
                     nopeText={"Nicht Gewusst"}
+                    smoothTransition={false}
                 />
                 <ProgressBar progress={this.state.progress} total={this.state.cards.length} combo={null} />
             </div>

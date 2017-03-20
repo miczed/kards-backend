@@ -71,6 +71,22 @@ class UserStore {
     }
 
     /**
+     * Returns the reference to the user object of the currently logged in user
+     * @returns {firebase.database.Reference|!firebase.database.Reference}
+     */
+    getRef() {
+        return firebaseApp.database().ref("users/" + this.user.uid);
+    }
+
+    /**
+     * Returns the reference to the sets of the currently logged in user
+     * @returns {!firebase.database.Reference|firebase.database.Reference}
+     */
+    getSetsRef() {
+        return this.getRef().child('sets');
+    }
+
+    /**
      * Creates a new user and automatically logs the user in,
      * if the registration was sucessful ( onAuthStateChanged is called )
      * @param email
