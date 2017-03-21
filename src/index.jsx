@@ -15,6 +15,7 @@ import UserStore from './stores/UserStore.jsx';
 
 // Import scss file which will be automatically included in the bundle.js
 require("./scss/style.scss");
+import 'bootstrap/dist/css/bootstrap.css';
 
 // sets mobx to strict mode
 useStrict(true);
