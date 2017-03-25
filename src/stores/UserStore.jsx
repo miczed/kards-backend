@@ -11,9 +11,14 @@ class UserStore {
     @observable username = undefined;
     @observable lastname = undefined;
     @observable firstname = undefined;
+    @observable avatarUrl = "";
 
     constructor(){
       this.startAuthStateListener();
+    }
+
+    @computed get fullName() {
+        return this.firstname + " " + this.lastname;
     }
 
     @action startAuthStateListener() {
@@ -59,7 +64,7 @@ class UserStore {
 
     /**
      * UNTESTED
-     * Gets username, lastname and firstname for user ID in Firebase DB
+     * Gets username, lastname and firstname and avatarUrl for user ID in Firebase DB
      * @param uid
      */
     getUserInfo(uid) {
@@ -67,6 +72,11 @@ class UserStore {
             this.username = snapshot.val() ? snapshot.val().username : null;
             this.lastname = snapshot.val() ? snapshot.val().lastname : null;
             this.firstname = snapshot.val() ? snapshot.val().firstname : null;
+        }));
+
+        firebaseApp.storage().ref("avatars/" + uid + ".jpg").getDownloadURL().then(action((url) => {
+            console.log(url);
+            this.avatarUrl = url;
         }));
     }
 

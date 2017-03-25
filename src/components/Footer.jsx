@@ -15,7 +15,7 @@ export default class FooterView extends React.Component {
                 <p className="footer_copyright">© {new Date().getFullYear()} Knub. </p>
                 <p className="footer_logo">Knub Logo</p>
                 <p className="footer_links">Other useful links...</p>
-            </div>
+              </div>
           </div>
         );
     }

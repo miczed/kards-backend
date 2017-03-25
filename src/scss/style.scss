@@ -3,6 +3,7 @@
 @import 'animations';
 
 // Component Import
+@import 'navigation';
 @import 'footer';
 @import 'login';
 @import 'signup';
@@ -28,14 +29,36 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.dropdown {
+	font-family: $sans;
+	font-weight: 400;
+}
+
+.dropdown-menu {
+	padding: 0.6em 0 0.8em;
+}
+
+.dropdown-header {
+	padding: 0.309rem 1rem;
+}
+
+.dropdown-item {
+	font-family: $sans;
+	padding: 0.309em 1em;
+}
+
+
 /* Grid Styles */
+
 .container {
 	width: $container-width;
 	position: relative;
     margin: 0 auto;
 }
 
+
 /* Component Styles */
+
 .card {
 	background: #FFFFFF;
 	opacity: 1.00;
@@ -80,7 +103,10 @@ body {
 	color: $almost-black;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
+
 /* General Typography */
+
 h1 {
 	font-family: "Source Sans Pro";
 	font-style: normal;
@@ -100,44 +126,9 @@ h2 {
 	margin-top: 10px;
 }
 
-/* NAVIGATION */
-
-.nav_wrapper {
-	width: 100%;
-	overflow: hidden;
-	background: #FFFFFF;
-	border: 1px solid rgba(0, 0, 0, 0.03);
-	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
-	border-radius: 3px;
-    margin-bottom: 40px;
-}
-
-.nav {
-	padding: 10px 0;
-	height: 60px;
-	.nav_logo {
-		float: left;
-        color: $primary-color;
-        font-weight: bold;
-        font-size: 18px;
-        line-height: 100%;
-        padding-top: 10px;
-    }
-
-	.nav_user {
-		float: right;
-		.userPic {
-			float: left;
-		}
-		.signout {
-			float: left;
-		}
-
-	}
-
-}
 
 /* CardStack */
+
 .cardStack {
 	width: 660px;
 	max-width: 100%;
