@@ -56,6 +56,7 @@ export default class SetStore {
      * @post User is added as a collaborator to set
      * @param title : String title of the set
      */
+    @action
     create(title) {
         const user = this.userStore.user;
         if(!user) {

@@ -15,7 +15,7 @@ export default class DashboardView extends Component {
         this.setStore = new SetStore(UserStore);
     }
     newSet() {
-        let title = prompt("Please enter the title of your Set", "");
+        var title = prompt("Please enter the title of your Set", "");
         if (title != null) {
             this.setStore.create(title);
         }
