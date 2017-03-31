@@ -4,7 +4,7 @@ import { SetStore, UserStore } from '../src/stores';
 import {observer} from 'mobx-react';
 import {reaction } from 'mobx';
 
-describe.only('Testing the SetStore', () => {
+describe('Testing the SetStore', () => {
     const email = "setstore@knub.io";
     const password = "hulibuly";
     const username = "testuser";

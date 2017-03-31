@@ -75,7 +75,6 @@ class UserStore {
         }));
 
         firebaseApp.storage().ref("avatars/" + uid + ".jpg").getDownloadURL().then(action((url) => {
-            console.log(url);
             this.avatarUrl = url;
         }));
     }

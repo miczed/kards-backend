@@ -12,6 +12,7 @@ import ProfileView from './views/ProfileView.jsx';
 import {observer} from 'mobx-react';
 import {reaction, useStrict } from 'mobx';
 import UserStore from './stores/UserStore.jsx';
+import SetView from "./views/SetView.jsx";
 
 // Import scss file which will be automatically included in the bundle.js
 require("./scss/style.scss");
@@ -57,8 +58,8 @@ function PublicRoute ({component: Component, authed, ...rest}) {
  */
 @observer
 export default class App extends Component {
-    constructor() {
-      super();
+    constructor(props) {
+      super(props);
       // when the user of the app changes, call the startApp function
       reaction(() => UserStore.user, () => this.startApp(UserStore.user));
       this.state = {
@@ -89,6 +90,7 @@ export default class App extends Component {
                   <PublicRoute authed={this.state.authed} path='/signup' component={SignUpView} />
                   <PublicRoute authed={this.state.authed} path='/login' component={LoginView} />
                   <PrivateRoute authed={this.state.authed} path='/dashboard' component={DashboardView} />
+                  <PrivateRoute authed={this.state.authed} path='/sets/:key' component={SetView} />
                   <PrivateRoute authed={this.state.authed} path='/profile' component={ProfileView} />
                   <PrivateRoute authed={this.state.authed} path='/learn' component={LearnView} />
                   <Route render={() => <h3>No Match</h3>} />

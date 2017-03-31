@@ -3,15 +3,17 @@ import {render} from 'react-dom';
 
 import {observer} from 'mobx-react';
 import {reaction } from 'mobx';
-import { SetStore, UserStore } from '../stores/index.jsx';
+import { SetStore, UserStore, CardStore } from '../stores/index.jsx';
 import NavigationView from './NavigationView.jsx';
 import FooterView from '../components/Footer.jsx';
 import SetList from '../components/SetList.jsx';
 
+import { Link } from 'react-router-dom'
+
 @observer
 export default class DashboardView extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.setStore = new SetStore(UserStore);
     }
     newSet() {

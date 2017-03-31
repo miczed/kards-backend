@@ -3,8 +3,10 @@
  */
 import UserStore from './UserStore.jsx';
 import SetStore from './SetStore';
+import CardStore from './CardStore';
 
 export {
     UserStore,
     SetStore,
+    CardStore,
 };

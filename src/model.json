@@ -28,6 +28,7 @@
 
     "cards" : {
       "card_key" : {
+        "title": "Observer Design Pattern",
         "front_delta": {},
         "front_html" : {},
         "back_delta" : {},

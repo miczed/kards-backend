@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 
+import { Link } from 'react-router-dom'
 import {observer} from 'mobx-react';
 
 import Icon from '../components/Icon.jsx';
@@ -16,7 +17,7 @@ export default class SetList extends React.Component {
             <li className="card set" key={key}>
 
                 <div className="header">
-                    <h3 className="float-left">{set.title}</h3>
+                    <Link to={"/sets/" + set.key}><h3 className="float-left">{set.title}</h3></Link>
                     <UncontrolledDropdown className="float-right">
                         <DropdownToggle caret>
                         </DropdownToggle>
