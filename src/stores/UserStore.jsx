@@ -74,9 +74,13 @@ class UserStore {
             this.firstname = snapshot.val() ? snapshot.val().firstname : null;
         }));
 
-        firebaseApp.storage().ref("avatars/" + uid + ".jpg").getDownloadURL().then(action((url) => {
-            this.avatarUrl = url;
-        }));
+        // in node.js the firebase storage doesn't work so the testing environment fails
+        if(firebaseApp.storage) {
+            firebaseApp.storage().ref("avatars/" + uid + ".jpg").getDownloadURL().then(action((url) => {
+                this.avatarUrl = url;
+            }));
+        }
+
     }
 
     /**

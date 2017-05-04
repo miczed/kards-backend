@@ -13,10 +13,13 @@ import {observer} from 'mobx-react';
 import {reaction, useStrict } from 'mobx';
 import UserStore from './stores/UserStore.jsx';
 import SetView from "./views/SetView.jsx";
+import EditView from "./views/EditView.jsx";
 
 // Import scss file which will be automatically included in the bundle.js
 require("./scss/style.scss");
 import 'bootstrap/dist/css/bootstrap.css';
+import 'react-quill/dist/quill.core.css';
+import 'react-quill/dist/quill.snow.css';
 
 // sets mobx to strict mode
 useStrict(true);
@@ -90,6 +93,7 @@ export default class App extends Component {
                   <PublicRoute authed={this.state.authed} path='/signup' component={SignUpView} />
                   <PublicRoute authed={this.state.authed} path='/login' component={LoginView} />
                   <PrivateRoute authed={this.state.authed} path='/dashboard' component={DashboardView} />
+                  <PrivateRoute authed={this.state.authed} path='/sets/:key/edit' component={EditView} />
                   <PrivateRoute authed={this.state.authed} path='/sets/:key' component={SetView} />
                   <PrivateRoute authed={this.state.authed} path='/profile' component={ProfileView} />
                   <PrivateRoute authed={this.state.authed} path='/learn' component={LearnView} />
