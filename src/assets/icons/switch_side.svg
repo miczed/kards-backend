@@ -1,0 +1,18 @@
+<svg width="20" height="14" viewBox="0 0 20 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:figma="http://www.figma.com/figma/ns">
+<title>switch_side</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-1167 8)" figma:type="canvas">
+<g id="switch_side" figma:type="frame">
+<g id="arrow-return" figma:type="frame">
+<g id="Line Icons" figma:type="frame">
+<g id="Vector" figma:type="vector">
+<use xlink:href="#path0_fill" transform="translate(1167.59 -8)" fill="#C4C4C4"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 14.414 0L 9.414 0L 9.414 2L 14.414 2C 16.068 2 17.414 3.346 17.414 5C 17.414 6.654 16.068 8 14.414 8L 3.828 8L 6.121 5.707L 4.707 4.293L -3.43323e-08 9L 4.707 13.707L 6.121 12.293L 3.828 10L 14.414 10C 17.171 10 19.414 7.757 19.414 5C 19.414 2.243 17.171 0 14.414 0Z"/>
+</defs>
+</svg>

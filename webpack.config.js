@@ -25,7 +25,7 @@ var config = {
       },
       {
         test: /\.scss$/,
-        loaders: ["style-loader", "css-loader", "sass-loader"]
+        loaders: ["style-loader", "css-loader", 'postcss-loader',"sass-loader"]
       },
         { test: /\.css$/, loader: 'style-loader!css-loader'},
     ]

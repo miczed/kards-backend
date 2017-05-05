@@ -3,9 +3,10 @@ import {render} from 'react-dom';
 
 // Map names to SVG paths
 const Icons = {
-    'cards'         : 'assets/icons/cards.svg',
-    'collaborators' : 'assets/icons/collaborators.svg',
-    'views'         : 'assets/icons/views.svg'
+    'cards'         : '/assets/icons/cards.svg',
+    'collaborators' : '/assets/icons/collaborators.svg',
+    'views'         : '/assets/icons/views.svg',
+    'switch_side'   : '/assets/icons/switch_side.svg'
 
 };
 
